@@ -65,6 +65,7 @@ class Car_Minigame():
         self.sign_1_text = self.font.render('50', True, (255, 255, 255));
         self.sign_1_text_rect = self.sign_1_text.get_rect();
         self.sign_1_text_rect.center = (165, 175);
+        self.move_timer = 100
 
     def run_minigame(self):
         if(self.rumbleUp):
@@ -79,6 +80,7 @@ class Car_Minigame():
         self.draw_window()
 
     def draw_window(self):
+        self.move_timer+=1
         self.WIN.fill((155,155,155))
         pg.draw.rect(self.WIN, (255, 200, 50), self.ground)
         pg.draw.rect(self.WIN, (100, 175, 255), self.sky)
@@ -97,13 +99,15 @@ class Car_Minigame():
         #Coordinate based system with discrete position, -1 left, 0 center, 1 right
 
         #Still need to fix this delay thing, shouldn't be pausing the minigame, maybe count ticks since last movement?
-        if keys_pressed[pg.K_LEFT] and self.CURRENT_POS != -1:
-            pg.time.delay(100)
+        if self.move_timer<10:
+            quit
+        elif keys_pressed[pg.K_LEFT] and self.CURRENT_POS != -1:
+            self.move_timer=0
             self.CURRENT_POS = self.CURRENT_POS - 1;
             self.car.x-= self.imageSet['car'].get_width()
 
-        if keys_pressed[pg.K_RIGHT] and self.CURRENT_POS != 1:
-            pg.time.delay(100)
+        elif keys_pressed[pg.K_RIGHT] and self.CURRENT_POS != 1:
+            self.move_timer=0
             self.CURRENT_POS = self.CURRENT_POS + 1;
             self.car.x += self.imageSet['car'].get_width()
 
