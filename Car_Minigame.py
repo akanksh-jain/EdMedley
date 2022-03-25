@@ -3,12 +3,13 @@ import pygame as pg
 import os
 pg.font.init()
 
+from Minigame import Minigame
+
 #Need to add win/lose condition and exit event so minigame queue knows to load next game.
-class Car_Minigame():
+class Car_Minigame(Minigame):
     
     def __init__(self, WIN, SCALE):
-        self.WIN = WIN;
-        self.SCALE = SCALE;
+        super().__init__(WIN, SCALE);
 
         self.WIDTH = WIN.get_width();
         self.HEIGHT = WIN.get_height();
@@ -28,29 +29,11 @@ class Car_Minigame():
 
         self.createObjects();
 
-    #May need to check if image name doesn't exist
-    def loadImages(self, listOfImageNames):
-        for name in listOfImageNames:
-            self.imageSet.update({name[0:-4] : pg.image.load(os.path.join('Assets', name)).convert()})
-
-    #Automatically checks if image is loaded and does global scaling itself, manual scaling still present
-    def initScaleImage(self, name, manWidth, manHeight):
-        if name in self.imageSet:
-            self.imageSet[name] = pg.transform.scale(self.imageSet[name], ((int)(self.WIDTH * self.SCALE * manWidth), (int)(self.HEIGHT * self.SCALE * manHeight)))
-            return
-        print("Scaling failed, '" + name + "' is not a valid image.");
-
     #Where initial image transformations should be organized
     def transformImages(self):
         self.initScaleImage('car', 0.9, 1);
         self.initScaleImage('Cactus_Short', 0.5, 0.5);
         self.initScaleImage('Cactus_Tall', 1, 2);
-
-    #Creates the rectangle for a certain image, only needs x and y position and image name
-    def initImageObjectRect(self, name, xpos, ypos):
-        if name in self.imageSet:
-            return pg.Rect(xpos, ypos, self.imageSet[name].get_width(), self.imageSet[name].get_height())
-        print("Object creation failed, '" + name + "' is not a valid image.");
 
     #Mixture of image object creation and basic geometry creation, may need to organize this later
     def createObjects(self):
@@ -98,7 +81,7 @@ class Car_Minigame():
     def handle_car_movement(self, keys_pressed):
         #Coordinate based system with discrete position, -1 left, 0 center, 1 right
 
-        #Still need to fix this delay thing, shouldn't be pausing the minigame, maybe count ticks since last movement?
+        #Better fix may be a state based system, ex. if moving then animation will play, as long as animation is playing, won't allow movement,
         if self.move_timer<10:
             quit
         elif keys_pressed[pg.K_LEFT] and self.CURRENT_POS != -1:
