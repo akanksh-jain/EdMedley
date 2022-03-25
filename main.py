@@ -31,7 +31,6 @@ def main():
                     run = False
         #Queue should also fix minigames running the while.
         minigame1.run_minigame();
-        print(pg.time.get_ticks())
 
     pg.quit()
 
