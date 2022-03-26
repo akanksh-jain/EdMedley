@@ -22,12 +22,16 @@ class Car_Minigame(Minigame):
         self.CURRENT_POS = 0;
         self.rumbleUp = True;
         self.rumbleDistance = 2;
+        self.move_timer = 100
 
         if(not pg.font.get_init):
             pg.font.init;
         self.font = pg.font.Font('freesansbold.ttf', 150);
 
         self.createObjects();
+
+        #Will need to change to event that moves the queue foward
+        pg.time.set_timer(pg.QUIT, 5000, 1);
 
     #Where initial image transformations should be organized
     def transformImages(self):
@@ -43,12 +47,25 @@ class Car_Minigame(Minigame):
 
         self.ground = pg.Rect(0, int(self.HEIGHT * .75), self.WIDTH, self.HEIGHT - int(self.HEIGHT * .75))
         self.sky = pg.Rect(0, 0, self.WIDTH, int(self.HEIGHT * .75))
-        self.sign_1 = pg.Rect(30, 100, 300, 250);
-        self.sign_1_border = pg.Rect(30, 100, 300, 250);
+
+        self.sign_1 = pg.Rect(80, 100, 300, 250);
+        self.sign_1_border = pg.Rect(80, 100, 300, 250);
         self.sign_1_text = self.font.render('50', True, (255, 255, 255));
         self.sign_1_text_rect = self.sign_1_text.get_rect();
-        self.sign_1_text_rect.center = (165, 175);
-        self.move_timer = 100
+        self.sign_1_text_rect.center = (200, 175);
+
+        self.sign_2 = pg.Rect(480, 100, 300, 250);
+        self.sign_2_border = pg.Rect(480, 100, 300, 250);
+        self.sign_2_text = self.font.render('24', True, (255, 255, 255));
+        self.sign_2_text_rect = self.sign_1_text.get_rect();
+        self.sign_2_text_rect.center = (600, 175);
+
+        self.sign_3 = pg.Rect(880, 100, 300, 250);
+        self.sign_3_border = pg.Rect(880, 100, 300, 250);
+        self.sign_3_text = self.font.render('81', True, (255, 255, 255));
+        self.sign_3_text_rect = self.sign_1_text.get_rect();
+        self.sign_3_text_rect.center = (1000, 175);
+
 
     def run_minigame(self):
         if(self.rumbleUp):
@@ -71,6 +88,14 @@ class Car_Minigame(Minigame):
         pg.draw.rect(self.WIN, (0, 175, 0), self.sign_1)
         pg.draw.rect(self.WIN, (255,255,255), self.sign_1_border, 4, border_radius= 15)
         self.WIN.blit(self.sign_1_text, self.sign_1_text_rect)
+
+        pg.draw.rect(self.WIN, (0, 175, 0), self.sign_2)
+        pg.draw.rect(self.WIN, (255,255,255), self.sign_2_border, 4, border_radius= 15)
+        self.WIN.blit(self.sign_2_text, self.sign_2_text_rect)
+
+        pg.draw.rect(self.WIN, (0, 175, 0), self.sign_3)
+        pg.draw.rect(self.WIN, (255,255,255), self.sign_3_border, 4, border_radius= 15)
+        self.WIN.blit(self.sign_3_text, self.sign_3_text_rect)
 
         self.WIN.blit(self.imageSet['Cactus_Short'],(self.cactus_short.x, self.cactus_short.y))
         self.WIN.blit(self.imageSet['Cactus_Tall'],(self.cactus_tall.x, self.cactus_tall.y))
