@@ -6,9 +6,10 @@ pg.font.init()
 from abc import ABC, abstractmethod
 
 class Minigame(ABC):
-    def __init__(self, WIN, SCALE):
+    def __init__(self, WIN, SCALE, NEXT_MINI):
         self.WIN = WIN;
         self.SCALE = SCALE;
+        self.NEXT_MINI = NEXT_MINI;
 
     #May need to check if image name doesn't exist
     def loadImages(self, listOfImageNames):
