@@ -2,14 +2,14 @@ from pydoc import render_doc
 import pygame as pg
 import os
 pg.font.init()
-
+import random
 from Minigame import Minigame
 
 #Need to add win/lose condition and exit event so minigame queue knows to load next game.
 class Car_Minigame(Minigame):
     
-    def __init__(self, WIN, SCALE):
-        super().__init__(WIN, SCALE);
+    def __init__(self, WIN, SCALE, NEXT_MINI):
+        super().__init__(WIN, SCALE, NEXT_MINI);
 
         self.WIDTH = WIN.get_width();
         self.HEIGHT = WIN.get_height();
@@ -22,12 +22,31 @@ class Car_Minigame(Minigame):
         self.CURRENT_POS = 0;
         self.rumbleUp = True;
         self.rumbleDistance = 2;
+        self.move_timer = 100
+
+
+        question_mode = random.randint(0, 2);
+
+        odds = [1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 29, 31, 33, 35, 37, 39, 41, 43, 45, 47, 49];
+        evens = [2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40, 42, 44, 46, 48, 50];
+        choices = []
 
         if(not pg.font.get_init):
             pg.font.init;
         self.font = pg.font.Font('freesansbold.ttf', 150);
 
         self.createObjects();
+
+    def startRunningMinigame(self):
+        #Will need to change to event that moves the queue foward
+        print("New Minigame")
+        pg.time.set_timer(self.NEXT_MINI, 5000, 1);
+
+    def chooseAnswers(listAns, listSub1, listSub2):
+        answer = listAns[random.randint(0, len(listAns) - 1)];
+        wrong1 = listSub1[random.randint(0, len(listSub1) - 1)];
+        wrong2 = listSub2[random.randint(0, len(listSub2) - 1)];
+
 
     #Where initial image transformations should be organized
     def transformImages(self):
@@ -43,12 +62,25 @@ class Car_Minigame(Minigame):
 
         self.ground = pg.Rect(0, int(self.HEIGHT * .75), self.WIDTH, self.HEIGHT - int(self.HEIGHT * .75))
         self.sky = pg.Rect(0, 0, self.WIDTH, int(self.HEIGHT * .75))
-        self.sign_1 = pg.Rect(30, 100, 300, 250);
-        self.sign_1_border = pg.Rect(30, 100, 300, 250);
-        self.sign_1_text = self.font.render('50', True, (255, 255, 255));
+
+        self.sign_1 = pg.Rect(80, 100, 300, 250);
+        self.sign_1_border = pg.Rect(80, 100, 300, 250);
+        self.sign_1_text = self.font.render(str(random.randint(1, 50)), True, (255, 255, 255));
         self.sign_1_text_rect = self.sign_1_text.get_rect();
-        self.sign_1_text_rect.center = (165, 175);
-        self.move_timer = 100
+        self.sign_1_text_rect.center = (200, 175);
+
+        self.sign_2 = pg.Rect(480, 100, 300, 250);
+        self.sign_2_border = pg.Rect(480, 100, 300, 250);
+        self.sign_2_text = self.font.render('24', True, (255, 255, 255));
+        self.sign_2_text_rect = self.sign_1_text.get_rect();
+        self.sign_2_text_rect.center = (600, 175);
+
+        self.sign_3 = pg.Rect(880, 100, 300, 250);
+        self.sign_3_border = pg.Rect(880, 100, 300, 250);
+        self.sign_3_text = self.font.render('81', True, (255, 255, 255));
+        self.sign_3_text_rect = self.sign_1_text.get_rect();
+        self.sign_3_text_rect.center = (1000, 175);
+
 
     def run_minigame(self):
         if(self.rumbleUp):
@@ -71,6 +103,14 @@ class Car_Minigame(Minigame):
         pg.draw.rect(self.WIN, (0, 175, 0), self.sign_1)
         pg.draw.rect(self.WIN, (255,255,255), self.sign_1_border, 4, border_radius= 15)
         self.WIN.blit(self.sign_1_text, self.sign_1_text_rect)
+
+        pg.draw.rect(self.WIN, (0, 175, 0), self.sign_2)
+        pg.draw.rect(self.WIN, (255,255,255), self.sign_2_border, 4, border_radius= 15)
+        self.WIN.blit(self.sign_2_text, self.sign_2_text_rect)
+
+        pg.draw.rect(self.WIN, (0, 175, 0), self.sign_3)
+        pg.draw.rect(self.WIN, (255,255,255), self.sign_3_border, 4, border_radius= 15)
+        self.WIN.blit(self.sign_3_text, self.sign_3_text_rect)
 
         self.WIN.blit(self.imageSet['Cactus_Short'],(self.cactus_short.x, self.cactus_short.y))
         self.WIN.blit(self.imageSet['Cactus_Tall'],(self.cactus_tall.x, self.cactus_tall.y))
