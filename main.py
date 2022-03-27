@@ -15,8 +15,16 @@ SCALE = 0.2;
 NEXT_MINI = pg.USEREVENT + 1;
 ADVANCE_TO_MINI = pg.USEREVENT + 2;
 
-def draw_window(font):
+def createTransition(font, minigameNumber):
+    transitionText = font.render("Minigame #" + str(minigameNumber), True, (255, 255, 255));
+    transitionRect = transitionText.get_rect();
+    transitionRect.center = (640, 360);    
+    return transitionText, transitionRect;
+
+def draw_window(font, minigameNumber, transitionText, transitionRect):
     WIN.fill((0, 0, 0));
+    if(transitionText is not NULL and transitionRect is not NULL):
+        WIN.blit(transitionText, transitionRect)
     pg.display.update();
     return
 
@@ -39,16 +47,19 @@ def main():
             pg.font.init;
     font = pg.font.Font('freesansbold.ttf', 150);
 
+    transitionText = NULL;
+    transitionRect = NULL;
+
     while run:
         clock.tick(30)
 
         for event in pg.event.get():
             if event.type == NEXT_MINI:
                 minigameNumber = minigameNumber + 1;
-                print(minigameNumber)
                 isMinigameInitialized = False;
                 isTransitioning = True;
-                pg.time.set_timer(ADVANCE_TO_MINI, 1000, 1);
+                transitionText, transitionRect = createTransition(font, minigameNumber);
+                pg.time.set_timer(ADVANCE_TO_MINI, 750, 1);
 
             if event.type == ADVANCE_TO_MINI:
                 if(not minigameQueue.empty()):
@@ -75,7 +86,7 @@ def main():
         if(not isTransitioning):
             currentRunningMinigame.run_minigame();
         else:
-            draw_window(font);
+            draw_window(font, minigameNumber, transitionText, transitionRect);
 
 
     pg.quit()
