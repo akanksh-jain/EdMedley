@@ -2,14 +2,14 @@ from pydoc import render_doc
 import pygame as pg
 import os
 pg.font.init()
-
+import random
 from Minigame import Minigame
 
 #Need to add win/lose condition and exit event so minigame queue knows to load next game.
 class Car_Minigame(Minigame):
     
-    def __init__(self, WIN, SCALE):
-        super().__init__(WIN, SCALE);
+    def __init__(self, WIN, SCALE, NEXT_MINI):
+        super().__init__(WIN, SCALE, NEXT_MINI);
 
         self.WIDTH = WIN.get_width();
         self.HEIGHT = WIN.get_height();
@@ -24,14 +24,29 @@ class Car_Minigame(Minigame):
         self.rumbleDistance = 2;
         self.move_timer = 100
 
+
+        question_mode = random.randint(0, 2);
+
+        odds = [1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 29, 31, 33, 35, 37, 39, 41, 43, 45, 47, 49];
+        evens = [2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40, 42, 44, 46, 48, 50];
+        choices = []
+
         if(not pg.font.get_init):
             pg.font.init;
         self.font = pg.font.Font('freesansbold.ttf', 150);
 
         self.createObjects();
 
+    def startRunningMinigame(self):
         #Will need to change to event that moves the queue foward
-        pg.time.set_timer(pg.QUIT, 5000, 1);
+        print("New Minigame")
+        pg.time.set_timer(self.NEXT_MINI, 5000, 1);
+
+    def chooseAnswers(listAns, listSub1, listSub2):
+        answer = listAns[random.randint(0, len(listAns) - 1)];
+        wrong1 = listSub1[random.randint(0, len(listSub1) - 1)];
+        wrong2 = listSub2[random.randint(0, len(listSub2) - 1)];
+
 
     #Where initial image transformations should be organized
     def transformImages(self):
@@ -50,7 +65,7 @@ class Car_Minigame(Minigame):
 
         self.sign_1 = pg.Rect(80, 100, 300, 250);
         self.sign_1_border = pg.Rect(80, 100, 300, 250);
-        self.sign_1_text = self.font.render('50', True, (255, 255, 255));
+        self.sign_1_text = self.font.render(str(random.randint(1, 50)), True, (255, 255, 255));
         self.sign_1_text_rect = self.sign_1_text.get_rect();
         self.sign_1_text_rect.center = (200, 175);
 
