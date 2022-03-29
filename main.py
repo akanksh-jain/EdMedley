@@ -1,46 +1,99 @@
-import pygame
+from asyncio.windows_events import NULL
+from pydoc import render_doc
+import pygame as pg
 import os
-pygame.font.init()
+pg.font.init()
 
-WIN = pygame.display.set_mode((1280,720))
-WIDTH, HEIGHT = WIN.get_width(),WIN.get_height()
-pygame.display.set_caption("EDMEDLEY")
+import queue
+from Car_Minigame import Car_Minigame
 
-CAR_IMAGE_PNG = pygame.image.load(os.path.join('Assets','car.png'))
-SCALE = .1
-CAR_IMAGE=pygame.transform.scale(CAR_IMAGE_PNG, ((int)(WIDTH*SCALE),(int)(HEIGHT*SCALE)))
+WIN = pg.display.set_mode((1280,720))
+WIDTH, HEIGHT = WIN.get_width(), WIN.get_height()
+pg.display.set_caption("EDMEDLEY")
 
-VEL=5
+SCALE = 0.2;
+NEXT_MINI = pg.USEREVENT + 1;
+ADVANCE_TO_MINI = pg.USEREVENT + 2;
 
-def draw_window(car):
-    WIN.fill((155,155,155))
-    WIN.blit(CAR_IMAGE,(car.x,car.y))
-    pygame.display.update()
+def createTransition(font, minigameNumber):
+    transitionText = font.render("Minigame #" + str(minigameNumber), True, (255, 255, 255));
+    transitionRect = transitionText.get_rect();
+    transitionRect.center = (640, 360);    
+    return transitionText, transitionRect;
 
-def handle_car_movement(keys_pressed,car):
-    if keys_pressed[pygame.K_LEFT] and car.x>WIDTH//2-(int)(1.5*CAR_IMAGE.get_width()):
-        car.x-=CAR_IMAGE.get_width()
-    if keys_pressed[pygame.K_RIGHT] and car.x<WIDTH//2+(int)(.5*CAR_IMAGE.get_width()):
-        car.x+=CAR_IMAGE.get_width()
+def draw_window(font, minigameNumber, transitionText, transitionRect):
+    WIN.fill((0, 0, 0));
+    if(transitionText is not NULL and transitionRect is not NULL):
+        WIN.blit(transitionText, transitionRect)
+    pg.display.update();
+    return
 
 def main():
-    car=pygame.Rect(WIDTH//2-CAR_IMAGE.get_width()//2,(int)(HEIGHT*.75)-CAR_IMAGE.get_height()//2,CAR_IMAGE.get_width(),CAR_IMAGE.get_height())
-    clock = pygame.time.Clock()
-    run = True
+    clock = pg.time.Clock();
+    run = True;
+    isMinigameInitialized = False;
+    isTransitioning = False;
+
+    queueMaxSize = 3;
+    minigameQueue = queue.LifoQueue(queueMaxSize);
+    while not minigameQueue.full():
+        minigameQueue.put(Car_Minigame(WIN, SCALE, NEXT_MINI));
+        
+    currentRunningMinigame = NULL;
+    minigameNumber = 0;
+    pg.event.post(pg.event.Event(NEXT_MINI));
+
+    if(not pg.font.get_init):
+            pg.font.init;
+    font = pg.font.Font('freesansbold.ttf', 150);
+
+    transitionText = NULL;
+    transitionRect = NULL;
+
     while run:
         clock.tick(30)
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
+
+        for event in pg.event.get():
+            if event.type == NEXT_MINI:
+                minigameNumber = minigameNumber + 1;
+                isMinigameInitialized = False;
+                isTransitioning = True;
+                transitionText, transitionRect = createTransition(font, minigameNumber);
+                pg.time.set_timer(ADVANCE_TO_MINI, 750, 1);
+
+            if event.type == ADVANCE_TO_MINI:
+                if(not minigameQueue.empty()):
+                    currentRunningMinigame = minigameQueue.get();
+                if(not minigameQueue.full()):
+                    minigameQueue.put(Car_Minigame(WIN, SCALE, NEXT_MINI));
+                if(currentRunningMinigame == NULL):
+                    print("Minigame failed to load");
+                    run = False;
+
+                isTransitioning = False;
+
+                if(not isMinigameInitialized):
+                    currentRunningMinigame.startRunningMinigame();
+                    isMinigameInitialized = True;
+
+            if event.type == pg.QUIT:
                 run = False
             
-            if pygame.key.get_focused and event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_ESCAPE:
+            if pg.key.get_focused and event.type == pg.KEYDOWN:
+                if event.key == pg.K_ESCAPE:
                     run = False
-        keys_pressed=pygame.key.get_pressed()
-        handle_car_movement(keys_pressed,car)
-        draw_window(car)
-    pygame.quit()
+
+        if(not isTransitioning):
+            currentRunningMinigame.run_minigame();
+        else:
+            draw_window(font, minigameNumber, transitionText, transitionRect);
+
+
+    pg.quit()
 
 if __name__ == "__main__":
     main()
+<<<<<<< HEAD
+>>>>>>> main
+=======
 >>>>>>> main
