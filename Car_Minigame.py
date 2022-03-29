@@ -16,7 +16,7 @@ class Car_Minigame(Minigame):
 
         #Simply list the names of the files you want to load, will auto load them for you, named after their file name sans file type
         self.imageSet = {};
-        self.loadImages(['car.png', 'Cactus_Short.jpg', 'Cactus_Tall.png', 'road.png']);
+        self.loadImages(['car.png', 'Cactus_Short.png', 'Cactus_Tall.png', 'road.png']);
         self.transformImages();
 
         self.CURRENT_POS = 0;
