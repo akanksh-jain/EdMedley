@@ -1,4 +1,3 @@
-from asyncio.windows_events import NULL
 from pydoc import render_doc
 import pygame as pg
 import os
@@ -23,7 +22,7 @@ def createTransition(font, minigameNumber):
 
 def draw_window(font, minigameNumber, transitionText, transitionRect):
     WIN.fill((0, 0, 0));
-    if(transitionText is not NULL and transitionRect is not NULL):
+    if(transitionText is not None and transitionRect is not None):
         WIN.blit(transitionText, transitionRect)
     pg.display.update();
     return
@@ -39,7 +38,7 @@ def main():
     while not minigameQueue.full():
         minigameQueue.put(Car_Minigame(WIN, SCALE, NEXT_MINI));
         
-    currentRunningMinigame = NULL;
+    currentRunningMinigame = None;
     minigameNumber = 0;
     pg.event.post(pg.event.Event(NEXT_MINI));
 
@@ -47,8 +46,8 @@ def main():
             pg.font.init;
     font = pg.font.Font('freesansbold.ttf', 150);
 
-    transitionText = NULL;
-    transitionRect = NULL;
+    transitionText = None;
+    transitionRect = None;
 
     while run:
         clock.tick(30)
@@ -66,7 +65,7 @@ def main():
                     currentRunningMinigame = minigameQueue.get();
                 if(not minigameQueue.full()):
                     minigameQueue.put(Car_Minigame(WIN, SCALE, NEXT_MINI));
-                if(currentRunningMinigame == NULL):
+                if(currentRunningMinigame == None):
                     print("Minigame failed to load");
                     run = False;
 
