@@ -16,7 +16,7 @@ class Car_Minigame(Minigame):
 
         #Simply list the names of the files you want to load, will auto load them for you, named after their file name sans file type
         self.imageSet = {};
-        self.loadImages(['car.png', 'Cactus_Short.jpg', 'Cactus_Tall.png', 'road.png']);
+        self.loadImages(['car.png', 'Cactus_Short.png', 'Cactus_Tall.png', 'road.png']);
         self.transformImages();
 
         self.CURRENT_POS = 0;
@@ -25,11 +25,7 @@ class Car_Minigame(Minigame):
         self.move_timer = 100
 
 
-        question_mode = random.randint(0, 2);
-
-        odds = [1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 29, 31, 33, 35, 37, 39, 41, 43, 45, 47, 49];
-        evens = [2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40, 42, 44, 46, 48, 50];
-        choices = []
+        
 
         if(not pg.font.get_init):
             pg.font.init;
@@ -42,11 +38,37 @@ class Car_Minigame(Minigame):
         print("New Minigame")
         pg.time.set_timer(self.NEXT_MINI, 5000, 1);
 
-    def chooseAnswers(listAns, listSub1, listSub2):
+    def createSignObject(self, sign1text, sign2text, sign3text):
+        self.sign_1 = pg.Rect(80, 100, 300, 250);
+        self.sign_1_border = pg.Rect(80, 100, 300, 250);
+        self.sign_1_text = self.font.render(str(sign1text), True, (255, 255, 255));
+        self.sign_1_text_rect = self.sign_1_text.get_rect();
+        self.sign_1_text_rect.center = (200, 175);
+
+        self.sign_2 = pg.Rect(480, 100, 300, 250);
+        self.sign_2_border = pg.Rect(480, 100, 300, 250);
+        self.sign_2_text = self.font.render(str(sign2text), True, (255, 255, 255));
+        self.sign_2_text_rect = self.sign_1_text.get_rect();
+        self.sign_2_text_rect.center = (600, 175);
+
+        self.sign_3 = pg.Rect(880, 100, 300, 250);
+        self.sign_3_border = pg.Rect(880, 100, 300, 250);
+        self.sign_3_text = self.font.render(str(sign3text), True, (255, 255, 255));
+        self.sign_3_text_rect = self.sign_1_text.get_rect();
+        self.sign_3_text_rect.center = (1000, 175);
+
+    def chooseAnswers(self, listAns, listSub1, listSub2):
+        correctSign = random.randint(1,3)
+        self.answerKey=correctSign
         answer = listAns[random.randint(0, len(listAns) - 1)];
         wrong1 = listSub1[random.randint(0, len(listSub1) - 1)];
         wrong2 = listSub2[random.randint(0, len(listSub2) - 1)];
-
+        if correctSign==1:
+            self.createSignObject(answer,wrong1,wrong2)
+        elif correctSign==2:
+            self.createSignObject(wrong1,answer,wrong2)
+        else:
+            self.createSignObject(wrong2,wrong1,answer)
 
     #Where initial image transformations should be organized
     def transformImages(self):
@@ -65,23 +87,15 @@ class Car_Minigame(Minigame):
         self.ground = pg.Rect(0, int(self.HEIGHT * .75), self.WIDTH, self.HEIGHT - int(self.HEIGHT * .75))
         self.sky = pg.Rect(0, 0, self.WIDTH, int(self.HEIGHT * .75))
 
-        self.sign_1 = pg.Rect(80, 100, 300, 250);
-        self.sign_1_border = pg.Rect(80, 100, 300, 250);
-        self.sign_1_text = self.font.render(str(random.randint(1, 50)), True, (255, 255, 255));
-        self.sign_1_text_rect = self.sign_1_text.get_rect();
-        self.sign_1_text_rect.center = (200, 175);
+        question_mode = random.randint(0, 1);
 
-        self.sign_2 = pg.Rect(480, 100, 300, 250);
-        self.sign_2_border = pg.Rect(480, 100, 300, 250);
-        self.sign_2_text = self.font.render('24', True, (255, 255, 255));
-        self.sign_2_text_rect = self.sign_1_text.get_rect();
-        self.sign_2_text_rect.center = (600, 175);
+        odds = [1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 29, 31, 33, 35, 37, 39, 41, 43, 45, 47, 49];
+        evens = [2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40, 42, 44, 46, 48, 50];
 
-        self.sign_3 = pg.Rect(880, 100, 300, 250);
-        self.sign_3_border = pg.Rect(880, 100, 300, 250);
-        self.sign_3_text = self.font.render('81', True, (255, 255, 255));
-        self.sign_3_text_rect = self.sign_1_text.get_rect();
-        self.sign_3_text_rect.center = (1000, 175);
+        if question_mode==0: #Evens
+            self.chooseAnswers(evens,odds,odds)
+        else:
+            self.chooseAnswers(odds,evens,evens)       
 
 
     def run_minigame(self):
