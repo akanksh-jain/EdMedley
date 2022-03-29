@@ -16,13 +16,14 @@ class Car_Minigame(Minigame):
 
         #Simply list the names of the files you want to load, will auto load them for you, named after their file name sans file type
         self.imageSet = {};
-        self.loadImages(['car.png', 'Cactus_Short.jpg', 'Cactus_Tall.png', 'gaming.png']);
+        self.loadImages(['car.png', 'Cactus_Short.jpg', 'Cactus_Tall.png', 'road.png']);
         self.transformImages();
 
         self.CURRENT_POS = 0;
         self.rumbleUp = True;
         self.rumbleDistance = 2;
         self.move_timer = 100
+
 
         question_mode = random.randint(0, 2);
 
@@ -52,12 +53,14 @@ class Car_Minigame(Minigame):
         self.initScaleImage('car', 0.9, 1);
         self.initScaleImage('Cactus_Short', 0.5, 0.5);
         self.initScaleImage('Cactus_Tall', 1, 2);
+        self.initScaleImage('road', 3, 1.25);
 
     #Mixture of image object creation and basic geometry creation, may need to organize this later
     def createObjects(self):
         self.car = self.initImageObjectRect('car', self.WIDTH // 2 - self.imageSet['car'].get_width() // 2,(int)(self.HEIGHT * .75) - self.imageSet['car'].get_height() // 2 - self.rumbleDistance // 2)
         self.cactus_short = self.initImageObjectRect('Cactus_Short', 60, int(self.HEIGHT * .75) - self.imageSet['Cactus_Short'].get_height())
         self.cactus_tall = self.initImageObjectRect('Cactus_Tall', 950, int(self.HEIGHT * .75) - self.imageSet['Cactus_Tall'].get_height())
+        self.road = self.initImageObjectRect('road', self.WIDTH // 2 - self.imageSet['road'].get_width() // 2, (int)(self.HEIGHT) - self.imageSet['road'].get_height())
 
         self.ground = pg.Rect(0, int(self.HEIGHT * .75), self.WIDTH, self.HEIGHT - int(self.HEIGHT * .75))
         self.sky = pg.Rect(0, 0, self.WIDTH, int(self.HEIGHT * .75))
@@ -113,6 +116,7 @@ class Car_Minigame(Minigame):
 
         self.WIN.blit(self.imageSet['Cactus_Short'],(self.cactus_short.x, self.cactus_short.y))
         self.WIN.blit(self.imageSet['Cactus_Tall'],(self.cactus_tall.x, self.cactus_tall.y))
+        self.WIN.blit(self.imageSet['road'],(self.road.x, self.road.y))
         self.WIN.blit(self.imageSet['car'],(self.car.x, self.car.y))
 
         pg.display.update()
