@@ -16,14 +16,13 @@ class Car_Minigame(Minigame):
 
         #Simply list the names of the files you want to load, will auto load them for you, named after their file name sans file type
         self.imageSet = {};
-        self.loadImages(['car.png', 'Cactus_Short.jpg', 'Cactus_Tall.png']);
+        self.loadImages(['car.png', 'Cactus_Short.jpg', 'Cactus_Tall.png', 'gaming.png']);
         self.transformImages();
 
         self.CURRENT_POS = 0;
         self.rumbleUp = True;
         self.rumbleDistance = 2;
         self.move_timer = 100
-
 
         question_mode = random.randint(0, 2);
 
