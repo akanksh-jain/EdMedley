@@ -22,9 +22,10 @@ class Minigame(ABC):
 
     #Automatically checks if image is loaded and does global scaling itself, manual scaling still present
     def initScaleImage(self, name, manWidth, manHeight):
+        if(manWidth < 0 or manHeight < 0):
+            return False;
         if name in self.imageSet:
             self.imageSet[name] = pg.transform.scale(self.imageSet[name], ((int)(self.WIDTH * self.SCALE * manWidth), (int)(self.HEIGHT * self.SCALE * manHeight)))
-            return
             return True
         print("Scaling failed, '" + name + "' is not a valid image.");
         return False
@@ -34,6 +35,8 @@ class Minigame(ABC):
         if name in self.imageSet:
             return pg.Rect(xpos, ypos, self.imageSet[name].get_width(), self.imageSet[name].get_height())
         print("Object creation failed, '" + name + "' is not a valid image.");
+
+        #Size of placeholder texture
         return pg.Rect(xpos, ypos, 420, 420);
  
     @abstractmethod
