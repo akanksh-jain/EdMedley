@@ -101,11 +101,11 @@ def main():
                 #Probably change to a stop minigames, return to menu event
                 run = False;
             firstTransition=True #constantly sets to true but only needs to do so once when the next minigame loads/could be made more efficient
-            lastMinigameAnswer=currentRunningMinigame.correctAnswer() #same issue as above but with the answer key
+            lastMinigameAnswer = currentRunningMinigame.correctAnswer() #same issue as above but with the answer key
         else:
             if lastMinigameAnswer and firstTransition: #Does not display the score until a point is earned/ unsure if this should be the intended functionality
                 score+=1
-                scoreText, scoreRect= createScoreText(font,score)
+                scoreText, scoreRect = createScoreText(font,score);
                 firstTransition=False
             draw_window(font, minigameNumber, transitionText, transitionRect, scoreText, scoreRect);
 
