@@ -15,9 +15,9 @@ jobs:
     steps:
       - checkout
       - run:
-        command: |
-          sudo pip install pytest
-          pytest
+          command: |
+            sudo pip install pytest
+            pytest
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
