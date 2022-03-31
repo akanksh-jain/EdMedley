@@ -1,4 +1,3 @@
-
 import queue
 
 class Minigame_Queue:
@@ -21,3 +20,6 @@ class Minigame_Queue:
 
     def isFull(self):
         return self.queue.full();
+
+    def isEmpty(self):
+        return self.queue.empty();
