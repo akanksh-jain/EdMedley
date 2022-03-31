@@ -62,3 +62,5 @@ class Test_minigame:
     def test_10(self):
         testMinigame = Car_Minigame(WIN, SCALE, NEXT_MINI);
         assert(testMinigame.initImageObjectRect('car', 10000, -1000)) != pg.Rect(0, 0, 420, 420);
+
+#All the Minigames above this mark test general Minigame methods and don't have to be repeated.

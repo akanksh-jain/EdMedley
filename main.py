@@ -4,6 +4,7 @@ import os
 pg.font.init()
 
 import queue
+from Minigame_Queue import Minigame_Queue
 from Car_Minigame import Car_Minigame
 
 WIN = pg.display.set_mode((1280,720))
@@ -33,10 +34,9 @@ def main():
     isMinigameInitialized = False;
     isTransitioning = False;
 
-    queueMaxSize = 3;
-    minigameQueue = queue.LifoQueue(queueMaxSize);
-    while not minigameQueue.full():
-        minigameQueue.put(Car_Minigame(WIN, SCALE, NEXT_MINI));
+    minigameQueue = Minigame_Queue(3);
+    while(not minigameQueue.isFull()):
+        minigameQueue.addToMinigameQueue(Car_Minigame(WIN, SCALE, NEXT_MINI));
         
     currentRunningMinigame = None;
     minigameNumber = 0;
@@ -51,7 +51,6 @@ def main():
 
     while run:
         clock.tick(30)
-
         for event in pg.event.get():
             if event.type == NEXT_MINI:
                 minigameNumber = minigameNumber + 1;
@@ -61,10 +60,10 @@ def main():
                 pg.time.set_timer(ADVANCE_TO_MINI, 750, 1);
 
             if event.type == ADVANCE_TO_MINI:
-                if(not minigameQueue.empty()):
-                    currentRunningMinigame = minigameQueue.get();
-                if(not minigameQueue.full()):
-                    minigameQueue.put(Car_Minigame(WIN, SCALE, NEXT_MINI));
+                currentRunningMinigame = minigameQueue.getFromMinigameQueue();
+                while(not minigameQueue.isFull()):
+                    minigameQueue.addToMinigameQueue(Car_Minigame(WIN, SCALE, NEXT_MINI));
+
                 if(currentRunningMinigame == None):
                     print("Minigame failed to load");
                     run = False;
@@ -83,7 +82,11 @@ def main():
                     run = False
 
         if(not isTransitioning):
-            currentRunningMinigame.run_minigame();
+            if(currentRunningMinigame != None):
+                currentRunningMinigame.run_minigame();
+            else:
+                #Probably change to a stop minigames, return to menu event
+                run = False;
         else:
             draw_window(font, minigameNumber, transitionText, transitionRect);
 
