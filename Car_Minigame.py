@@ -35,6 +35,12 @@ class Car_Minigame(Minigame):
         print("New Minigame")
         pg.time.set_timer(self.NEXT_MINI, 5000, 1);
 
+    def correctAnswer(self):
+        if self.answerKey-2==self.CURRENT_POS:
+            return True
+        else:
+            return False
+
     def createSignObject(self, sign1text, sign2text, sign3text):
         self.sign_1 = pg.Rect(80, 100, 300, 250);
         self.sign_1_border = pg.Rect(80, 100, 300, 250);
@@ -141,12 +147,12 @@ class Car_Minigame(Minigame):
         elif keys_pressed[pg.K_LEFT] and self.CURRENT_POS != -1:
             self.move_timer=0
             self.CURRENT_POS = self.CURRENT_POS - 1;
-            self.car.x-= self.imageSet['car'].get_width()
+            self.car.x-= self.imageSet['car'].get_width()-30
 
         elif keys_pressed[pg.K_RIGHT] and self.CURRENT_POS != 1:
             self.move_timer=0
             self.CURRENT_POS = self.CURRENT_POS + 1;
-            self.car.x += self.imageSet['car'].get_width()
+            self.car.x += self.imageSet['car'].get_width()-30
 
     def handle_cactus_movements(self):
         if(self.cactus_short.y >= self.HEIGHT):
