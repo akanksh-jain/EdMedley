@@ -24,9 +24,6 @@ class Car_Minigame(Minigame):
         self.rumbleDistance = 2;
         self.move_timer = 100
 
-
-        
-
         if(not pg.font.get_init):
             pg.font.init;
         self.font = pg.font.Font('freesansbold.ttf', 150);
