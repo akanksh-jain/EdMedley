@@ -85,11 +85,14 @@ class Car_Minigame(Minigame):
         self.car = self.initImageObjectRect('car', self.WIDTH // 2 - self.imageSet['car'].get_width() // 2,(int)(self.HEIGHT * .75) - self.imageSet['car'].get_height() // 2 - self.rumbleDistance // 2)
         self.cactus_short = self.initImageObjectRect('Cactus_Short', 60, int(self.HEIGHT * .75) - self.imageSet['Cactus_Short'].get_height())
         self.cactus_tall = self.initImageObjectRect('Cactus_Tall', 950, int(self.HEIGHT * .75) - self.imageSet['Cactus_Tall'].get_height())
-        self.road = self.initImageObjectRect('road', self.WIDTH // 2 - self.imageSet['road'].get_width() // 2, (int)(self.HEIGHT) - self.imageSet['road'].get_height())
+
+        self.road_first = self.initImageObjectRect('road', self.WIDTH // 2 - self.imageSet['road'].get_width() // 2, (int)(self.HEIGHT) - self.imageSet['road'].get_height())
+        self.road_second = self.initImageObjectRect('road', self.WIDTH // 2 - self.imageSet['road'].get_width() // 2, (int)(self.HEIGHT) - 2 * self.imageSet['road'].get_height())
 
         self.ground = pg.Rect(0, int(self.HEIGHT * .75), self.WIDTH, self.HEIGHT - int(self.HEIGHT * .75))
         self.sky = pg.Rect(0, 0, self.WIDTH, int(self.HEIGHT * .75))
 
+        self.bar_top = pg.Rect(0, 120, self.WIDTH, 40)
         question_mode = random.randint(0, 1);
 
         odds = [1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 29, 31, 33, 35, 37, 39, 41, 43, 45, 47, 49];
@@ -111,14 +114,21 @@ class Car_Minigame(Minigame):
         keys_pressed = pg.key.get_pressed()
         self.handle_car_movement(keys_pressed);
         self.handle_cactus_movements();
+        self.handle_road_movements();
         self.draw_window()
 
     def draw_window(self):
         self.move_timer+=1
         self.WIN.fill((155,155,155))
+        #Ground and Sky
         pg.draw.rect(self.WIN, (255, 200, 50), self.ground)
+        self.WIN.blit(self.imageSet['road'],(self.road_first.x, self.road_first.y))
+        self.WIN.blit(self.imageSet['road'],(self.road_second.x, self.road_second.y))
         pg.draw.rect(self.WIN, (100, 175, 255), self.sky)
 
+        pg.draw.rect(self.WIN, (200, 200, 200), self.bar_top)
+
+        #Sign 1, 2, 3
         pg.draw.rect(self.WIN, (0, 175, 0), self.sign_1)
         pg.draw.rect(self.WIN, (255,255,255), self.sign_1_border, 4, border_radius= 15)
         self.WIN.blit(self.sign_1_text, self.sign_1_text_rect)
@@ -133,7 +143,6 @@ class Car_Minigame(Minigame):
 
         self.WIN.blit(self.imageSet['Cactus_Short'],(self.cactus_short.x, self.cactus_short.y))
         self.WIN.blit(self.imageSet['Cactus_Tall'],(self.cactus_tall.x, self.cactus_tall.y))
-        self.WIN.blit(self.imageSet['road'],(self.road.x, self.road.y))
         self.WIN.blit(self.imageSet['car'],(self.car.x, self.car.y))
 
         pg.display.update()
@@ -162,3 +171,12 @@ class Car_Minigame(Minigame):
         if(self.cactus_tall.y >= self.HEIGHT):
             self.cactus_tall.y = int(self.HEIGHT * .75) - self.imageSet['Cactus_Tall'].get_height()
         self.cactus_tall.y = self.cactus_tall.y + 20;
+
+    def handle_road_movements(self):
+        if(self.road_first.y >= self.HEIGHT):
+            self.road_first.y = int(self.HEIGHT) - 2 * self.imageSet['road'].get_height()
+        self.road_first.y = self.road_first.y + 20;
+
+        if(self.road_second.y >= self.HEIGHT):
+            self.road_second.y = int(self.HEIGHT) - 2 * self.imageSet['road'].get_height()
+        self.road_second.y = self.road_second.y + 20;
