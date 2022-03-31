@@ -15,16 +15,24 @@ SCALE = 0.2;
 NEXT_MINI = pg.USEREVENT + 1;
 ADVANCE_TO_MINI = pg.USEREVENT + 2;
 
+def createScoreText(font,score):
+    scoreText = font.render("Score: " + str(score), True, (255, 255, 255));
+    scoreRect = scoreText.get_rect();
+    scoreRect.center = (640, 560);    
+    return scoreText, scoreRect;
+
 def createTransition(font, minigameNumber):
     transitionText = font.render("Minigame #" + str(minigameNumber), True, (255, 255, 255));
     transitionRect = transitionText.get_rect();
     transitionRect.center = (640, 360);    
     return transitionText, transitionRect;
 
-def draw_window(font, minigameNumber, transitionText, transitionRect):
+def draw_window(font, minigameNumber, transitionText, transitionRect, scoreText, scoreRect):
     WIN.fill((0, 0, 0));
     if(transitionText is not None and transitionRect is not None):
         WIN.blit(transitionText, transitionRect)
+    if(scoreText is not None and scoreRect is not None): 
+        WIN.blit(scoreText, scoreRect)
     pg.display.update();
     return
 
@@ -33,6 +41,7 @@ def main():
     run = True;
     isMinigameInitialized = False;
     isTransitioning = False;
+    firstTransition = True; #Used to ensure that the score is updated only once, perhaps could be done cleaner with an event flag
 
     minigameQueue = Minigame_Queue(3);
     while(not minigameQueue.isFull()):
@@ -48,6 +57,10 @@ def main():
 
     transitionText = None;
     transitionRect = None;
+    scoreText = None
+    scoreRect = None
+    lastMinigameAnswer=False
+    score=0
 
     while run:
         clock.tick(30)
@@ -87,9 +100,14 @@ def main():
             else:
                 #Probably change to a stop minigames, return to menu event
                 run = False;
+            firstTransition=True #constantly sets to true but only needs to do so once when the next minigame loads/could be made more efficient
+            lastMinigameAnswer=currentRunningMinigame.correctAnswer() #same issue as above but with the answer key
         else:
-            draw_window(font, minigameNumber, transitionText, transitionRect);
-
+            if lastMinigameAnswer and firstTransition: #Does not display the score until a point is earned/ unsure if this should be the intended functionality
+                score+=1
+                scoreText, scoreRect= createScoreText(font,score)
+                firstTransition=False
+            draw_window(font, minigameNumber, transitionText, transitionRect, scoreText, scoreRect);
 
     pg.quit()
 
