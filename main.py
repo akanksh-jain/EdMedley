@@ -1,6 +1,8 @@
 from pydoc import render_doc
 import pygame as pg
 import os
+from pathlib import Path
+import json
 pg.font.init()
 
 import queue
@@ -9,6 +11,10 @@ from Car_Minigame import Car_Minigame
 WIN = pg.display.set_mode((1280,720))
 WIDTH, HEIGHT = WIN.get_width(), WIN.get_height()
 pg.display.set_caption("EDMEDLEY")
+
+path_to_script = os.path.dirname(os.path.abspath(__file__))
+save_file_path = os.path.join(path_to_script, "save_file.json")
+save_data=None
 
 SCALE = 0.2;
 NEXT_MINI = pg.USEREVENT + 1;
@@ -35,7 +41,19 @@ def draw_window(font, minigameNumber, transitionText, transitionRect, scoreText,
     pg.display.update();
     return
 
+def save():
+    with open(save_file_path, "w") as save_file:
+        json.dump(save_data, save_file)
+
 def main():
+    file = Path(save_file_path)
+    file.touch(exist_ok=True)
+    with open(file, "r") as save_file:
+        save_data = json.load(save_file)
+    if save_data == False:
+        save_data = {
+            "high score" : 0
+        }
     clock = pg.time.Clock();
     run = True;
     isMinigameInitialized = False;
