@@ -6,7 +6,7 @@ pg.font.init()
 from Minigame_Queue import Minigame_Queue
 from Car_Minigame import Car_Minigame
 
-os.environ["SDL_VIDEODRIVER"] = "directfb"
+os.environ["SDL_VIDEODRIVER"] = "dummy"
 pg.init()
 WIN = pg.display.set_mode((1280,720));
 SCALE = 0.2;
