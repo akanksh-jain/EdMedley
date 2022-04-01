@@ -18,7 +18,7 @@ class Test_minigame_queue:
     def test_1(self):
         minigameQueue = Minigame_Queue(3);
         testMinigame = Car_Minigame(WIN, SCALE, NEXT_MINI);
-        assert(minigameQueue.addToMinigameQueue(Car_Minigame(WIN, SCALE, NEXT_MINI))) != True;
+        assert(minigameQueue.addToMinigameQueue(Car_Minigame(WIN, SCALE, NEXT_MINI))) == True;
 
     #Adding Minigame to full queue fails gracefully.
     def test_2(self):
