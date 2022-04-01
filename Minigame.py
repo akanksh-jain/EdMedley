@@ -18,7 +18,7 @@ class Minigame(ABC):
             if(os.path.exists(os.path.join('Assets', name))):
                 self.imageSet.update({name[0:-4] : pg.image.load(os.path.join('Assets', name))})
             else:
-                self.imageSet.update({name[0:-4] : pg.image.load(os.path.join('Assets', 'PlaceHolder.png'))})
+                self.imageSet.update({name[0:-4] : pg.image.load(os.path.join('Assets', 'Placeholder.png'))})
 
     #Automatically checks if image is loaded and does global scaling itself, manual scaling still present
     def initScaleImage(self, name, manWidth, manHeight):
