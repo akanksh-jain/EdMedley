@@ -23,10 +23,12 @@ class Car_Minigame(Minigame):
         self.rumbleUp = True;
         self.rumbleDistance = 2;
         self.move_timer = 100
+        self.tutorial_timer = 0;
 
         if(not pg.font.get_init):
             pg.font.init;
         self.font = pg.font.Font('freesansbold.ttf', 150);
+        self.tutorial_font = pg.font.Font('freesansbold.ttf', 100);
 
         self.createObjects();
 
@@ -40,6 +42,16 @@ class Car_Minigame(Minigame):
             return True
         else:
             return False
+
+    def createTutorialText(self, question_mode):
+        if question_mode==0: #Evens
+            self.tutorial_text=self.tutorial_font.render("Select the Even Lane", True, (255, 255, 255))
+            self.tutorial_rect=self.tutorial_text.get_rect()
+            self.tutorial_rect.center = (600, 50)
+        else:
+            self.tutorial_text=self.tutorial_font.render("Select the Odd Lane", True, (255, 255, 255))
+            self.tutorial_rect=self.tutorial_text.get_rect()
+            self.tutorial_rect.center = (600, 50)
 
     def createSignObject(self, sign1text, sign2text, sign3text):
         self.sign_1 = pg.Rect(80, 100, 300, 250);
@@ -100,8 +112,9 @@ class Car_Minigame(Minigame):
 
         if question_mode==0: #Evens
             self.chooseAnswers(evens,odds,odds)
-        else:
-            self.chooseAnswers(odds,evens,evens)       
+        else: #question_mode==1, Odds
+            self.chooseAnswers(odds,evens,evens)
+        self.createTutorialText(question_mode)       
 
 
     def run_minigame(self):
@@ -145,6 +158,10 @@ class Car_Minigame(Minigame):
         self.WIN.blit(self.imageSet['Cactus_Tall'],(self.cactus_tall.x, self.cactus_tall.y))
         self.WIN.blit(self.imageSet['car'],(self.car.x, self.car.y))
 
+        if self.tutorial_timer<70:
+            self.tutorial_timer+=1;
+            self.WIN.blit(self.tutorial_text,self.tutorial_rect)
+            
         pg.display.update()
 
     def handle_car_movement(self, keys_pressed):
