@@ -6,6 +6,7 @@ pg.font.init()
 from Car_Minigame import Car_Minigame
 
 #Test Game Parameters
+pg.init()
 WIN = pg.display.set_mode((1280,720))
 SCALE = 0.2;
 NEXT_MINI = pg.USEREVENT + 1;

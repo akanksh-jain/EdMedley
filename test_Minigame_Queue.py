@@ -6,6 +6,7 @@ pg.font.init()
 from Minigame_Queue import Minigame_Queue
 from Car_Minigame import Car_Minigame
 
+pg.init()
 WIN = pg.display.set_mode((1280,720));
 SCALE = 0.2;
 NEXT_MINI = pg.USEREVENT + 1;
