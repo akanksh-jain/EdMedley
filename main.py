@@ -64,6 +64,7 @@ def main():
             "high score" : 0
         }
     clock = pg.time.Clock();
+    
     run = True;
     isMinigameInitialized = False;
     isTransitioning = False;

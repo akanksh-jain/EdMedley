@@ -22,7 +22,7 @@ class Car_Minigame(Minigame):
         self.CURRENT_POS = 0;
         self.rumbleUp = True;
         self.rumbleDistance = 2;
-        self.move_timer = 100
+        self.move_timer = 100;
         self.tutorial_timer = 0;
 
         if(not pg.font.get_init):
@@ -31,11 +31,12 @@ class Car_Minigame(Minigame):
         self.tutorial_font = pg.font.Font('freesansbold.ttf', 100);
 
         self.createObjects();
+        self.createAnswerChoices();
 
     def startRunningMinigame(self):
         #Will need to change to event that moves the queue foward
         print("New Minigame")
-        pg.time.set_timer(self.NEXT_MINI, 5000, 1);
+        pg.time.set_timer(self.NEXT_MINI, self.duration, 1);
 
     def correctAnswer(self):
         if self.answerKey-2==self.CURRENT_POS:
@@ -72,19 +73,6 @@ class Car_Minigame(Minigame):
         self.sign_3_text_rect = self.sign_1_text.get_rect();
         self.sign_3_text_rect.center = (1000, 175);
 
-    def chooseAnswers(self, listAns, listSub1, listSub2):
-        correctSign = random.randint(1,3)
-        self.answerKey=correctSign
-        answer = listAns[random.randint(0, len(listAns) - 1)];
-        wrong1 = listSub1[random.randint(0, len(listSub1) - 1)];
-        wrong2 = listSub2[random.randint(0, len(listSub2) - 1)];
-        if correctSign==1:
-            self.createSignObject(answer,wrong1,wrong2)
-        elif correctSign==2:
-            self.createSignObject(wrong1,answer,wrong2)
-        else:
-            self.createSignObject(wrong2,wrong1,answer)
-
     #Where initial image transformations should be organized
     def transformImages(self):
         self.initScaleImage('car', 0.9, 1);
@@ -105,17 +93,25 @@ class Car_Minigame(Minigame):
         self.sky = pg.Rect(0, 0, self.WIDTH, int(self.HEIGHT * .75))
 
         self.bar_top = pg.Rect(0, 120, self.WIDTH, 40)
-        question_mode = random.randint(0, 1);
 
+    def createAnswerChoices(self):
+        question_mode = random.randint(0, 1);
         odds = [1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 29, 31, 33, 35, 37, 39, 41, 43, 45, 47, 49];
         evens = [2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40, 42, 44, 46, 48, 50];
 
         if question_mode==0: #Evens
-            self.chooseAnswers(evens,odds,odds)
+            self.chooseAnswersFrom3(evens,odds,odds)
         else: #question_mode==1, Odds
-            self.chooseAnswers(odds,evens,evens)
-        self.createTutorialText(question_mode)       
+            self.chooseAnswersFrom3(odds,evens,evens)
 
+        if self.answerKey==1:
+            self.createSignObject(self.getAnswer(), self.getWrong1(), self.getWrong2())
+        elif self.answerKey==2:
+            self.createSignObject(self.getWrong1(), self.getAnswer(), self.getWrong2())
+        else:
+            self.createSignObject(self.getWrong1(), self.getWrong2(), self.getAnswer())
+
+        self.createTutorialText(question_mode)       
 
     def run_minigame(self):
         if(self.rumbleUp):
@@ -162,6 +158,7 @@ class Car_Minigame(Minigame):
             self.tutorial_timer+=1;
             self.WIN.blit(self.tutorial_text,self.tutorial_rect)
             
+        self.drawTimer();
         pg.display.update()
 
     def handle_car_movement(self, keys_pressed):

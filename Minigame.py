@@ -1,16 +1,22 @@
 from logging import PlaceHolder
 from pydoc import render_doc
+from secrets import choice
 import pygame as pg
 import os
 pg.font.init()
 
 from abc import ABC, abstractmethod
+import random
 
 class Minigame(ABC):
     def __init__(self, WIN, SCALE, NEXT_MINI):
         self.WIN = WIN;
         self.SCALE = SCALE;
         self.NEXT_MINI = NEXT_MINI;
+        self.choices = [];
+        self.answerKey = 1;
+        self.duration = 5000;
+        self.timeLeft = self.duration;
 
     #May need to check if image name doesn't exist
     def loadImages(self, listOfImageNames):
@@ -39,6 +45,61 @@ class Minigame(ABC):
         #Size of placeholder texture
         return pg.Rect(xpos, ypos, 420, 420);
  
+    def chooseAnswersFrom3(self, listAns, listSub1, listSub2):
+        self.answerKey = random.randint(1,5) % 3 + 1;
+        answer = listAns[random.randint(0, len(listAns) - 1)];
+        wrong1 = listSub1[random.randint(0, len(listSub1) - 1)];
+        wrong2 = listSub2[random.randint(0, len(listSub2) - 1)];
+        if(self.answerKey == 1):
+            self.choices = [answer, wrong1, wrong2];
+            return
+        elif(self.answerKey == 2):
+            self.choices = [wrong1, answer, wrong2];
+            return
+        else:
+            self.choices = [wrong1, wrong2, answer];
+            return
+
+    #Should always have 3 or more choices
+    def getAnswer(self):
+        if(len(self.choices) > 0):
+            return self.choices[self.answerKey - 1]
+        return "NULL";
+
+    def getWrong1(self):
+        if(len(self.choices) > 0):
+            if(self.answerKey >= 2):
+                return self.choices[0];
+            else:
+                return self.choices[1];
+        return "NULL";
+
+    def getWrong2(self):
+        if(len(self.choices) > 0):
+            if(self.answerKey <= 2):
+                return self.choices[2];
+            else:
+                return self.choices[1];
+        return "NULL";
+
+    def drawTimer(self):
+        #Called every tick so based on FPS, need to change if FPS changes
+        self.timeLeft = self.timeLeft - 33;
+        #Red is increasing value, green is decreasing
+        redVal = (int)(255 * abs(self.duration - self.timeLeft) / self.duration);
+        greenVal = (int)(255 * abs(self.timeLeft) / self.duration);
+        if(redVal >= 255):
+            redVal = 255;
+
+        if(greenVal <= 0):
+            greenVal = 0;
+
+        newLength = (int)(1200 * self.timeLeft / self.duration);
+        if(newLength <= 0):
+            newLength = 0;
+
+        pg.draw.rect(self.WIN, (redVal, greenVal, 0), pg.Rect(40, 680, newLength, 30));
+
     @abstractmethod
     def run_minigame(self):
         pass
