@@ -2,7 +2,6 @@ from pydoc import render_doc
 import pygame as pg
 import os
 
-from main import durationCalculator
 pg.font.init()
 
 from Car_Minigame import Car_Minigame
