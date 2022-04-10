@@ -92,7 +92,7 @@ def addRandomMinigame(listOfMinigames, minigameCurrentDuration):
 def main():
 
     #For testing to see if game crashes at some point, slow down to check graphical stability
-    STABILITY_TESTING_MODE = True;
+    STABILITY_TESTING_MODE = False;
     MINIGAME_TESTING_MODE_SPEED = 1;
     TRANSITION_TESTING_MODE_SPEED = 1;
 
