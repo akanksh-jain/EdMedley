@@ -8,6 +8,7 @@ pg.font.init()
 import queue
 from Minigame_Queue import Minigame_Queue
 from Car_Minigame import Car_Minigame
+from Spelling_Minigame import Spelling_Minigame
 
 WIN = pg.display.set_mode((1280,720))
 WIDTH, HEIGHT = WIN.get_width(), WIN.get_height()
@@ -124,7 +125,7 @@ def main():
 
     minigameQueue = Minigame_Queue(3);
     while(not minigameQueue.isFull()):
-        minigameQueue.addToMinigameQueue(Car_Minigame(WIN, SCALE, NEXT_MINI, minigameCurrentDuration));
+        minigameQueue.addToMinigameQueue(Spelling_Minigame(WIN, SCALE, NEXT_MINI, minigameCurrentDuration));
         
     currentRunningMinigame = None;
     pg.event.post(pg.event.Event(ADVANCE_TO_MINI));
@@ -168,7 +169,7 @@ def main():
             if event.type == ADVANCE_TO_MINI:
                 currentRunningMinigame = minigameQueue.getFromMinigameQueue();
                 while(not minigameQueue.isFull()):
-                    minigameQueue.addToMinigameQueue(Car_Minigame(WIN, SCALE, NEXT_MINI, minigameCurrentDuration));
+                    minigameQueue.addToMinigameQueue(Spelling_Minigame(WIN, SCALE, NEXT_MINI, minigameCurrentDuration));
 
                 #Fail-safe if queue is somehow empty at loading
                 if(currentRunningMinigame == None):
