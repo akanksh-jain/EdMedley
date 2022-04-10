@@ -19,26 +19,25 @@ class Test_minigame_queue:
     def test_1(self):
         minigameQueue = Minigame_Queue(3);
         testMinigame = Car_Minigame(WIN, SCALE, NEXT_MINI, duration);
-        assert(minigameQueue.addToMinigameQueue(Car_Minigame(WIN, SCALE, NEXT_MINI, duration))) == True;
+        assert(minigameQueue.addToMinigameQueue(testMinigame)) == True;
 
     #Adding Minigame to full queue fails gracefully.
     def test_2(self):
         minigameQueue = Minigame_Queue(1);
         testMinigame = Car_Minigame(WIN, SCALE, NEXT_MINI, duration);
-        minigameQueue.addToMinigameQueue(Car_Minigame(WIN, SCALE, NEXT_MINI, duration));
+        minigameQueue.addToMinigameQueue(testMinigame);
         assert(minigameQueue.isFull()) == True;
-        assert(minigameQueue.addToMinigameQueue(Car_Minigame(WIN, SCALE, NEXT_MINI, duration))) == False;
+        assert(minigameQueue.addToMinigameQueue(testMinigame)) == False;
 
     #Getting minigame from queue succeeds.
     def test_3(self):
         minigameQueue = Minigame_Queue(3);
         testMinigame = Car_Minigame(WIN, SCALE, NEXT_MINI, duration);
-        minigameQueue.addToMinigameQueue(Car_Minigame(WIN, SCALE, NEXT_MINI, duration));
+        minigameQueue.addToMinigameQueue(testMinigame);
         assert(minigameQueue.getFromMinigameQueue()) != None;
 
     #Getting minigame from empty queue fails gracefully.
     def test_4(self):
         minigameQueue = Minigame_Queue(1);
-        testMinigame = Car_Minigame(WIN, SCALE, NEXT_MINI, duration);
         assert(minigameQueue.isEmpty()) == True;
         assert(minigameQueue.getFromMinigameQueue()) == None;
