@@ -9,13 +9,13 @@ from abc import ABC, abstractmethod
 import random
 
 class Minigame(ABC):
-    def __init__(self, WIN, SCALE, NEXT_MINI):
+    def __init__(self, WIN, SCALE, NEXT_MINI, duration):
         self.WIN = WIN;
         self.SCALE = SCALE;
         self.NEXT_MINI = NEXT_MINI;
         self.choices = [];
         self.answerKey = 1;
-        self.duration = 5000;
+        self.duration = duration;
         self.timeLeft = self.duration;
 
     #May need to check if image name doesn't exist
@@ -83,22 +83,24 @@ class Minigame(ABC):
         return "NULL";
 
     def drawTimer(self):
-        #Called every tick so based on FPS, need to change if FPS changes
-        self.timeLeft = self.timeLeft - 33;
-        #Red is increasing value, green is decreasing
-        redVal = (int)(255 * abs(self.duration - self.timeLeft) / self.duration);
-        greenVal = (int)(255 * abs(self.timeLeft) / self.duration);
-        if(redVal >= 255):
-            redVal = 255;
+        #Debugging can set duration to 1
+        if(self.duration >= 50):
+            #Called every tick so based on FPS, need to change if FPS changes
+            self.timeLeft = self.timeLeft - 33;
+            #Red is increasing value, green is decreasing
+            redVal = (int)(255 * abs(self.duration - self.timeLeft) / self.duration);
+            greenVal = (int)(255 * abs(self.timeLeft) / self.duration);
+            if(redVal >= 255):
+                redVal = 255;
 
-        if(greenVal <= 0):
-            greenVal = 0;
+            if(greenVal <= 0):
+                greenVal = 0;
 
-        newLength = (int)(1200 * self.timeLeft / self.duration);
-        if(newLength <= 0):
-            newLength = 0;
+            newLength = (int)(1200 * self.timeLeft / self.duration);
+            if(newLength <= 0):
+                newLength = 0;
 
-        pg.draw.rect(self.WIN, (redVal, greenVal, 0), pg.Rect(40, 680, newLength, 30));
+            pg.draw.rect(self.WIN, (redVal, greenVal, 0), pg.Rect(40, 680, newLength, 30));
 
     @abstractmethod
     def run_minigame(self):
@@ -106,4 +108,8 @@ class Minigame(ABC):
 
     @abstractmethod
     def draw_window(self):
+        pass
+
+    @abstractmethod
+    def correctAnswer(self):
         pass
