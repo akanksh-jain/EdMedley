@@ -9,7 +9,7 @@ from abc import ABC, abstractmethod
 import random
 
 class Minigame(ABC):
-    def __init__(self, WIN, SCALE, NEXT_MINI, duration = 5000):
+    def __init__(self, WIN, SCALE, NEXT_MINI, duration):
         self.WIN = WIN;
         self.SCALE = SCALE;
         self.NEXT_MINI = NEXT_MINI;

@@ -9,7 +9,7 @@ from Minigame import Minigame
 class Car_Minigame(Minigame):
     
     def __init__(self, WIN, SCALE, NEXT_MINI, duration):
-        super().__init__(WIN, SCALE, NEXT_MINI, duration = 5000);
+        super().__init__(WIN, SCALE, NEXT_MINI, duration);
 
         self.WIDTH = WIN.get_width();
         self.HEIGHT = WIN.get_height();
