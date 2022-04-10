@@ -20,7 +20,6 @@ class Test_minigame:
     #Testing that loading existing images works.
     def test_1(self):
         testMinigame = Car_Minigame(WIN, SCALE, NEXT_MINI, duration);
-
         assert(testMinigame.loadImages(['car.png', 'Cactus_Short.png', 'Cactus_Tall.png', 'road.png'])) == None;
 
     #Testing that loading non-existing images works.
