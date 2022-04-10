@@ -1,4 +1,5 @@
 from pydoc import render_doc
+from random import randint
 import pygame as pg
 import os
 from pathlib import Path
@@ -8,6 +9,7 @@ pg.font.init()
 import queue
 from Minigame_Queue import Minigame_Queue
 from Car_Minigame import Car_Minigame
+from Spelling_Minigame import Spelling_Minigame
 
 WIN = pg.display.set_mode((1280,720))
 WIDTH, HEIGHT = WIN.get_width(), WIN.get_height()
@@ -76,10 +78,21 @@ def durationCalculator(minigameNumber, startDuration, endDuration):
         return endDuration;
     return int(endDuration + (startDuration - endDuration) * pow(2, -0.25 * minigameNumber));
 
+def addRandomMinigame(listOfMinigames, minigameCurrentDuration):
+    length = len(listOfMinigames);
+    choice = listOfMinigames[randint(0, length - 1)];
+
+    if(choice == 'car'):
+        return Car_Minigame(WIN, SCALE, NEXT_MINI, minigameCurrentDuration);
+    elif(choice == 'spell'):
+        return Spelling_Minigame(WIN, SCALE, NEXT_MINI, minigameCurrentDuration);
+
+    return Car_Minigame(WIN, SCALE, NEXT_MINI, minigameCurrentDuration);
+
 def main():
 
     #For testing to see if game crashes at some point, slow down to check graphical stability
-    STABILITY_TESTING_MODE = False;
+    STABILITY_TESTING_MODE = True;
     MINIGAME_TESTING_MODE_SPEED = 1;
     TRANSITION_TESTING_MODE_SPEED = 1;
 
@@ -108,6 +121,8 @@ def main():
     isTransitioning = False;
     firstTransition = True; #Used to ensure that the score is updated only once, perhaps could be done cleaner with an event flag
 
+    listOfMinigames = ['car', 'spell']
+
     minigameNumber = 0;
 
     minigameCurrentDuration = MINIGAME_TESTING_MODE_SPEED
@@ -124,7 +139,7 @@ def main():
 
     minigameQueue = Minigame_Queue(3);
     while(not minigameQueue.isFull()):
-        minigameQueue.addToMinigameQueue(Car_Minigame(WIN, SCALE, NEXT_MINI, minigameCurrentDuration));
+        minigameQueue.addToMinigameQueue(addRandomMinigame(listOfMinigames, minigameCurrentDuration));
         
     currentRunningMinigame = None;
     pg.event.post(pg.event.Event(ADVANCE_TO_MINI));
@@ -168,7 +183,7 @@ def main():
             if event.type == ADVANCE_TO_MINI:
                 currentRunningMinigame = minigameQueue.getFromMinigameQueue();
                 while(not minigameQueue.isFull()):
-                    minigameQueue.addToMinigameQueue(Car_Minigame(WIN, SCALE, NEXT_MINI, minigameCurrentDuration));
+                    minigameQueue.addToMinigameQueue(addRandomMinigame(listOfMinigames, minigameCurrentDuration));
 
                 #Fail-safe if queue is somehow empty at loading
                 if(currentRunningMinigame == None):

@@ -7,8 +7,8 @@ from Minigame import Minigame
 
 class Spelling_Minigame(Minigame):
 
-    def __init__(self, WIN, SCALE, NEXT_MINI):
-        super().__init__(WIN, SCALE, NEXT_MINI);
+    def __init__(self, WIN, SCALE, NEXT_MINI, duration):
+        super().__init__(WIN, SCALE, NEXT_MINI, duration);
 
         self.WIDTH = WIN.get_width();
         self.HEIGHT = WIN.get_height();
