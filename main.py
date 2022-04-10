@@ -19,7 +19,8 @@ save_data={}
 
 SCALE = 0.2;
 NEXT_MINI = pg.USEREVENT + 1;
-ADVANCE_TO_MINI = pg.USEREVENT + 2;
+GO_TO_TRANSITION = pg.USEREVENT + 2
+ADVANCE_TO_MINI = pg.USEREVENT + 3;
 
 def createScoreText(font,score):
     scoreText = font.render("Score: " + str(score), True, (255, 255, 255));
@@ -33,12 +34,35 @@ def createTransition(font, minigameNumber):
     transitionRect.center = (640, 360);    
     return transitionText, transitionRect;
 
-def draw_window(font, minigameNumber, transitionText, transitionRect, scoreText, scoreRect):
+def createWinLose(font, lastMinigameAnswer):
+    winLoseText = None;
+    winLoseRect = None;
+    if(lastMinigameAnswer):
+        winLoseText = font.render("WIN!", True, (255, 255, 255));
+    else:
+        winLoseText = font.render("LOSS!", True, (255, 255, 255));
+
+    winLoseRect = winLoseText.get_rect();
+    winLoseRect.center = (640, 360);    
+    return winLoseText, winLoseRect;
+
+
+def draw_win_lose_window(scoreText, scoreRect, winLoseText, winLoseRect, lastMinigameAnswer):
+    if(lastMinigameAnswer):
+        WIN.fill((0, 200, 0));
+    else:
+        WIN.fill((200, 0, 0));
+    if(winLoseText is not None and winLoseRect is not None): 
+        WIN.blit(winLoseText, winLoseRect)
+    if(scoreText is not None and scoreRect is not None): 
+        WIN.blit(scoreText, scoreRect)
+    pg.display.update();
+    return
+
+def draw_transition_window(transitionText, transitionRect):
     WIN.fill((0, 0, 0));
     if(transitionText is not None and transitionRect is not None):
         WIN.blit(transitionText, transitionRect)
-    if(scoreText is not None and scoreRect is not None): 
-        WIN.blit(scoreText, scoreRect)
     pg.display.update();
     return
 
@@ -47,7 +71,20 @@ def save(data):
         json.dump(data, save_file)
         save_file.close()
 
+def durationCalculator(minigameNumber, startDuration, endDuration):
+    if(minigameNumber >= 30):
+        return endDuration;
+    return int(endDuration + (startDuration - endDuration) * pow(2, -0.25 * minigameNumber));
+
 def main():
+
+    #For testing to see if game crashes at some point, slow down to check graphical stability
+    STABILITY_TESTING_MODE = False;
+    MINIGAME_TESTING_MODE_SPEED = 1;
+    TRANSITION_TESTING_MODE_SPEED = 1;
+
+    PLAY_TESTING_MODE = False;
+
     file = Path(save_file_path)
     file.touch(exist_ok=True)
     if os.stat(save_file_path).st_size == 0:
@@ -67,16 +104,30 @@ def main():
     
     run = True;
     isMinigameInitialized = False;
+    isGoingToWinLoseScreen = False;
     isTransitioning = False;
     firstTransition = True; #Used to ensure that the score is updated only once, perhaps could be done cleaner with an event flag
 
+    minigameNumber = 0;
+
+    minigameCurrentDuration = MINIGAME_TESTING_MODE_SPEED
+    transitionCurrentDuration = TRANSITION_TESTING_MODE_SPEED
+
+    if(not STABILITY_TESTING_MODE):
+        minigameStartDuration = 5000
+        minigameEndDuration = 2000
+        minigameCurrentDuration = durationCalculator(minigameNumber, minigameStartDuration, minigameEndDuration);
+
+        transitionStartDuration = 750
+        transitionEndDuration = 350
+        transitionCurrentDuration = durationCalculator(minigameNumber, transitionStartDuration, transitionEndDuration);
+
     minigameQueue = Minigame_Queue(3);
     while(not minigameQueue.isFull()):
-        minigameQueue.addToMinigameQueue(Car_Minigame(WIN, SCALE, NEXT_MINI));
+        minigameQueue.addToMinigameQueue(Car_Minigame(WIN, SCALE, NEXT_MINI, minigameCurrentDuration));
         
     currentRunningMinigame = None;
-    minigameNumber = 0;
-    pg.event.post(pg.event.Event(NEXT_MINI));
+    pg.event.post(pg.event.Event(ADVANCE_TO_MINI));
 
     if(not pg.font.get_init):
             pg.font.init;
@@ -87,29 +138,46 @@ def main():
     scoreText = None
     scoreRect = None
     lastMinigameAnswer=False
-    score=0
+    score = 0
+    losses = 0
 
     while run:
         clock.tick(30)
         for event in pg.event.get():
+            #Event fires when the minigame ends, shows scores and win/lose
             if event.type == NEXT_MINI:
-                minigameNumber = minigameNumber + 1;
                 isMinigameInitialized = False;
+                isGoingToWinLoseScreen = True;
                 isTransitioning = True;
-                transitionText, transitionRect = createTransition(font, minigameNumber);
-                pg.time.set_timer(ADVANCE_TO_MINI, 750, 1);
 
+                #Calculate the times here for organization
+                if(not STABILITY_TESTING_MODE):
+                    transitionCurrentDuration = durationCalculator(minigameNumber, transitionStartDuration, transitionEndDuration);
+                    minigameCurrentDuration = durationCalculator(minigameNumber, minigameStartDuration, minigameEndDuration);
+
+                pg.time.set_timer(GO_TO_TRANSITION, transitionCurrentDuration, 1);
+
+            #Event fires when time ends for win/lose screen, shows minigame number
+            if event.type == GO_TO_TRANSITION:
+                minigameNumber = minigameNumber + 1;
+                isGoingToWinLoseScreen = False;
+                transitionText, transitionRect = createTransition(font, minigameNumber);
+                pg.time.set_timer(ADVANCE_TO_MINI, transitionCurrentDuration, 1);
+
+            #Event fires when transition is done, loads next minigame
             if event.type == ADVANCE_TO_MINI:
                 currentRunningMinigame = minigameQueue.getFromMinigameQueue();
                 while(not minigameQueue.isFull()):
-                    minigameQueue.addToMinigameQueue(Car_Minigame(WIN, SCALE, NEXT_MINI));
+                    minigameQueue.addToMinigameQueue(Car_Minigame(WIN, SCALE, NEXT_MINI, minigameCurrentDuration));
 
+                #Fail-safe if queue is somehow empty at loading
                 if(currentRunningMinigame == None):
                     print("Minigame failed to load");
                     run = False;
 
                 isTransitioning = False;
 
+                #Initializes the minigame once and begins running
                 if(not isMinigameInitialized):
                     currentRunningMinigame.startRunningMinigame();
                     isMinigameInitialized = True;
@@ -121,7 +189,8 @@ def main():
                 if event.key == pg.K_ESCAPE:
                     run = False
 
-        if(not isTransitioning):
+        #Checks if application is in minigame playing mode 
+        if(isMinigameInitialized):
             if(currentRunningMinigame != None):
                 currentRunningMinigame.run_minigame();
             else:
@@ -129,14 +198,27 @@ def main():
                 run = False;
             firstTransition=True #constantly sets to true but only needs to do so once when the next minigame loads/could be made more efficient
             lastMinigameAnswer = currentRunningMinigame.correctAnswer() #same issue as above but with the answer key
-        else:
-            if lastMinigameAnswer and firstTransition: #Does not display the score until a point is earned/ unsure if this should be the intended functionality
-                score+=1
-                if score > save_data["high score"]:
-                    save_data["high score"] = score
-                scoreText, scoreRect= createScoreText(font,score)
-                firstTransition=False
-            draw_window(font, minigameNumber, transitionText, transitionRect, scoreText, scoreRect);
+
+        #Checks if application is in transition mode
+        if(isTransitioning):
+            #Determines what part of the two part transition is playing, the win/loss or minigame num
+            if (isGoingToWinLoseScreen):
+                if(firstTransition):
+                    #If correct, else if not
+                    if(lastMinigameAnswer):
+                        score+=1
+                        if score > save_data["high score"]:
+                            save_data["high score"] = score
+                    else:
+                        losses += 1;
+                        print(losses)
+                    firstTransition = False;
+                scoreText, scoreRect = createScoreText(font,score)
+                winLoseText, winLoseRect = createWinLose(font, lastMinigameAnswer)
+                draw_win_lose_window(scoreText, scoreRect, winLoseText, winLoseRect, lastMinigameAnswer);
+            else:
+                draw_transition_window(transitionText, transitionRect);
+
     save(save_data)
 
     pg.quit()
