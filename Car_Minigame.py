@@ -33,11 +33,6 @@ class Car_Minigame(Minigame):
         self.createObjects();
         self.createAnswerChoices();
 
-    def startRunningMinigame(self):
-        #Will need to change to event that moves the queue foward
-        print("New Minigame")
-        pg.time.set_timer(self.NEXT_MINI, self.duration, 1);
-
     def correctAnswer(self):
         if self.answerKey-2==self.CURRENT_POS:
             return True
@@ -194,3 +189,6 @@ class Car_Minigame(Minigame):
         if(self.road_second.y >= self.HEIGHT):
             self.road_second.y = int(self.HEIGHT) - 2 * self.imageSet['road'].get_height()
         self.road_second.y = self.road_second.y + 20;
+
+    def getMinigameTag(self):
+        return 'car'
