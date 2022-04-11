@@ -39,11 +39,6 @@ class Spelling_Minigame(Minigame):
     def createObjects(self):
         self.pencil = self.initImageObjectRect('pencil', self.WIDTH // 2 - self.imageSet['pencil'].get_width() // 2,(int)(self.HEIGHT * .75) - self.imageSet['pencil'].get_height() // 2 - self.rumbleDistance // 2)
         self.background = pg.transform.scale(pg.image.load(os.path.join('Assets','notebook_background.png')),(1280,720))
-
-    def startRunningMinigame(self):
-        #Will need to change to event that moves the queue foward
-        print("New Minigame")
-        pg.time.set_timer(self.NEXT_MINI, self.duration, 1);
     
     def createTutorialText(self):
         self.tutorial_text=self.tutorial_font.render("Choose the Correct Spelling", True, (0, 0, 0))
@@ -135,3 +130,6 @@ class Spelling_Minigame(Minigame):
         self.sign_3_text = self.font.render(str(sign3text), True, (255, 255, 255));
         self.sign_3_text_rect = self.sign_1_text.get_rect();
         self.sign_3_text_rect.center = (1000, 175);
+
+    def getMinigameTag(self):
+        return 'spell'
