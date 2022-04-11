@@ -55,16 +55,10 @@ class Spelling_Minigame(Minigame):
         self.WIN.blit(self.background,(0,0))
         self.WIN.blit(self.imageSet['pencil'],(self.pencil.x, self.pencil.y))
         
-        pg.draw.rect(self.WIN, (0, 175, 0), self.sign_1)
-        pg.draw.rect(self.WIN, (255,255,255), self.sign_1_border, 4, border_radius= 15)
         self.WIN.blit(self.sign_1_text, self.sign_1_text_rect)
 
-        pg.draw.rect(self.WIN, (0, 175, 0), self.sign_2)
-        pg.draw.rect(self.WIN, (255,255,255), self.sign_2_border, 4, border_radius= 15)
         self.WIN.blit(self.sign_2_text, self.sign_2_text_rect)
 
-        pg.draw.rect(self.WIN, (0, 175, 0), self.sign_3)
-        pg.draw.rect(self.WIN, (255,255,255), self.sign_3_border, 4, border_radius= 15)
         self.WIN.blit(self.sign_3_text, self.sign_3_text_rect)
 
         if self.tutorial_timer<70:
@@ -95,7 +89,7 @@ class Spelling_Minigame(Minigame):
     
     def createAnswerChoices(self):
         #the correct answer will be in the first position
-        question_bank = [["spelling","speling","speeling"],["crayon","krayon","craon"],["paraphrase","paraphase","parafrase"],["rewrite","rewrit","riwrite"],["root","rott","roat"],["usage","usige","usege"],["verify","veerify","verrify"],["claim","claime","claym"],["prose","proase","prosse"],["perform","prefform","perfform"],["repetition","reptition",'wrepition'],["pitch","petch","pitsh"]]
+        question_bank = [["spelling","speling","speeling"],["crayon","krayon","craon"],["paraphrase","paraphase","parafrase"],["rewrite","rewrit","riwrite"],["root","rott","roat"],["usage","usige","usege"],["verify","veerify","verrify"],["claim","claime","claym"],["prose","proase","prosse"],["perform","prefform","perfform"],["repetition","reptition",'wrepition'],["pitch","petch","pitsh"],["consequences","consaquences","consequnses"],["beautiful","beeutiful","beutiful"],["country","kountry","countree"],["against","agenst","againts"],["oppose","oposse","opposse"],["dominant","domenant","domiant"],["straight","straitt","straigt"],["although","altho","altough"]]
         question=random.randint(0,len(question_bank)-1)
         self.answerKey = random.randint(1,5) % 3 + 1
         if(self.answerKey == 1):
@@ -106,30 +100,24 @@ class Spelling_Minigame(Minigame):
             self.choices = [question_bank[question][1], question_bank[question][2], question_bank[question][0]];
 
         if self.answerKey==1:
-            self.createSignObject(self.getAnswer(), self.getWrong1(), self.getWrong2())
+            self.createSignObject("a) "+self.getAnswer(), "b) "+self.getWrong1(), "c) "+self.getWrong2())
         elif self.answerKey==2:
-            self.createSignObject(self.getWrong1(), self.getAnswer(), self.getWrong2())
+            self.createSignObject("a) "+self.getWrong1(), "b) "+self.getAnswer(), "c) "+self.getWrong2())
         else:
-            self.createSignObject(self.getWrong1(), self.getWrong2(), self.getAnswer())
+            self.createSignObject("a) "+self.getWrong1(), "b) "+self.getWrong2(), "c) "+self.getAnswer())
 
     def createSignObject(self, sign1text, sign2text, sign3text):
-        self.sign_1 = pg.Rect(80, 100, 300, 250);
-        self.sign_1_border = pg.Rect(80, 100, 300, 250);
-        self.sign_1_text = self.font.render(str(sign1text), True, (255, 255, 255));
+        self.sign_1_text = self.font.render(str(sign1text), True, (50, 50, 50));
         self.sign_1_text_rect = self.sign_1_text.get_rect();
-        self.sign_1_text_rect.center = (200, 175);
+        self.sign_1_text_rect.center = (250, 175);
 
-        self.sign_2 = pg.Rect(480, 100, 300, 250);
-        self.sign_2_border = pg.Rect(480, 100, 300, 250);
-        self.sign_2_text = self.font.render(str(sign2text), True, (255, 255, 255));
+        self.sign_2_text = self.font.render(str(sign2text), True, (50, 50, 50))
         self.sign_2_text_rect = self.sign_1_text.get_rect();
-        self.sign_2_text_rect.center = (600, 175);
+        self.sign_2_text_rect.center = (650, 175);
 
-        self.sign_3 = pg.Rect(880, 100, 300, 250);
-        self.sign_3_border = pg.Rect(880, 100, 300, 250);
-        self.sign_3_text = self.font.render(str(sign3text), True, (255, 255, 255));
+        self.sign_3_text = self.font.render(str(sign3text), True, (50, 50, 50))
         self.sign_3_text_rect = self.sign_1_text.get_rect();
-        self.sign_3_text_rect.center = (1000, 175);
+        self.sign_3_text_rect.center = (1050, 175);
 
     def getMinigameTag(self):
         return 'spell'
