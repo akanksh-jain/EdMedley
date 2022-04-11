@@ -102,6 +102,12 @@ class Minigame(ABC):
 
             pg.draw.rect(self.WIN, (redVal, greenVal, 0), pg.Rect(40, 680, newLength, 30));
 
+    def startRunningMinigame(self):
+        #Will need to change to event that moves the queue foward
+        print("New Minigame")
+        pg.time.set_timer(self.NEXT_MINI, self.duration, 1);
+
+    #Should tick the minigame forwards
     @abstractmethod
     def run_minigame(self):
         pass
@@ -113,3 +119,8 @@ class Minigame(ABC):
     @abstractmethod
     def correctAnswer(self):
         pass
+
+    @abstractmethod
+    def getMinigameTag(self):
+        pass
+
