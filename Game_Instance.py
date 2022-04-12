@@ -5,6 +5,7 @@ pg.font.init()
 from Minigame_Queue import Minigame_Queue
 from Car_Minigame import Car_Minigame
 from Spelling_Minigame import Spelling_Minigame
+from Animals_Minigame import Animals_Minigame
 
 class Game_Instance:
     
@@ -194,5 +195,7 @@ class Game_Instance:
             return Car_Minigame(self.WIN, self.SCALE, self.NEXT_MINI, self.minigameCurrentDuration);
         elif(choice == 'spell'):
             return Spelling_Minigame(self.WIN, self.SCALE, self.NEXT_MINI, self.minigameCurrentDuration);
+        elif(choice == 'animals'):
+            return Animals_Minigame(self.WIN, self.SCALE, self.NEXT_MINI, self.minigameCurrentDuration);
 
         return Car_Minigame(self.WIN, self.SCALE, self.NEXT_MINI, self.minigameCurrentDuration);
