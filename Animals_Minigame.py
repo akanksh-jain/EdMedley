@@ -56,10 +56,6 @@ class Animals_Minigame(Minigame):
         self.tutorial_rect = self.tutorial_text.get_rect()
         self.tutorial_rect.center = (600,50)
 
-    def startRunningMinigame(self):
-        print("New Minigame")
-        pg.time.set_timer(self.NEXT_MINI, self.duration, 1);
-
     def run_minigame(self):
         keys_pressed = pg.key.get_pressed()
         self.handle_mag_glass_movement(keys_pressed);
