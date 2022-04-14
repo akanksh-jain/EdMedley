@@ -18,12 +18,13 @@ SCALE = 0.2;
 
 class Test_minigame:
 
+    #Play game speed up for a while and check if it crashes
     def test_stability(self):
         listOfMinigames = ['car', 'spell', 'animals']
         Game = Game_Instance(WIN, SCALE, listOfMinigames, NEXT_MINI, GO_TO_TRANSITION, ADVANCE_TO_MINI, False, True);
 
         clock = pg.time.Clock();
-        pg.time.set_timer(pg.QUIT, 5000, 1);
+        pg.time.set_timer(pg.QUIT, 7000, 1);
         run = True;
         while run:
             clock.tick(30)
@@ -48,3 +49,4 @@ class Test_minigame:
                         run = False
 
             Game.tickGameInstance()
+

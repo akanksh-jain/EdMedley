@@ -185,7 +185,10 @@ class Game_Instance:
     def durationCalculator(self, startDuration, endDuration):
         if(self.minigameNumber >= 30):
             return endDuration;
-        return int(endDuration + (startDuration - endDuration) * pow(2, -0.25 * self.minigameNumber));
+        result = int(endDuration + (startDuration - endDuration) * pow(2, -0.25 * self.minigameNumber));
+        if(result <= 0):
+            return 1;
+        return result;
 
     def addRandomMinigame(self):
         length = len(self.listOfMinigames);
