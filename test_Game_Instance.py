@@ -24,6 +24,7 @@ class Test_minigame:
 
         clock = pg.time.Clock();
         pg.time.set_timer(pg.QUIT, 5000, 1);
+        run = True;
         while run:
             clock.tick(30)
             for event in pg.event.get():
