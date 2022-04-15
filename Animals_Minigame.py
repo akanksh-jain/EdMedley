@@ -85,7 +85,7 @@ class Animals_Minigame(Minigame):
             self.initScaleImage('Ant', 2, 2)
 
     def createObjects(self):
-        self.background = pg.transform.scale(pg.image.load(os.path.join('Assets', 'Detective_room.png')), (1280,720))
+        self.background = pg.transform.scale(self.imageSet['Detective_room'], (1280,720))
         self.mag_glass = self.initImageObjectRect('Mag_glass', (self.WIDTH // 2 - self.imageSet['Mag_glass'].get_width() // 2) + 50, (int)(self.HEIGHT * .6) - self.imageSet['Mag_glass'].get_height() // 2)
 
 
