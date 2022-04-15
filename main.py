@@ -49,7 +49,7 @@ def main():
 
     listOfMinigames = ['car', 'spell', 'animals']
 
-    Game = Game_Instance(WIN, SCALE, listOfMinigames, NEXT_MINI, GO_TO_TRANSITION, ADVANCE_TO_MINI, False, True);
+    Game = Game_Instance(WIN, SCALE, listOfMinigames, NEXT_MINI, GO_TO_TRANSITION, ADVANCE_TO_MINI, False, False);
 
     while run:
         clock.tick(30)
