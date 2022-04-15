@@ -47,7 +47,7 @@ def main():
     
     run = True;
 
-    listOfMinigames = ['animals']
+    listOfMinigames = ['car', 'spell', 'animals']
 
     Game = Game_Instance(WIN, SCALE, listOfMinigames, NEXT_MINI, GO_TO_TRANSITION, ADVANCE_TO_MINI, False, False);
 
