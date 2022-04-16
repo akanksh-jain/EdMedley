@@ -62,14 +62,13 @@ class Game_Instance:
         return
 
     def tickGameInstance(self):
-
         #Checks if application is in minigame playing mode 
         if(self.isMinigameInitialized):
             if(self.currentRunningMinigame != None):
                 self.currentRunningMinigame.run_minigame();
             else:
                 #Probably change to a stop minigames, return to menu event
-                pg.time.set_timer(pg.QUIT, 1, 1);
+                pg.event.post(pg.event.Event(pg.QUIT));
                 return
             self.firstTransition=True #constantly sets to true but only needs to do so once when the next minigame loads/could be made more efficient
             self.lastMinigameAnswer = self.currentRunningMinigame.correctAnswer() #same issue as above but with the answer key
@@ -98,6 +97,7 @@ class Game_Instance:
     def stateHandlerGameInstance(self, eventId):
         #Event fires when the minigame ends, shows scores and win/lose
         if eventId == self.NEXT_MINI:
+
             self.isMinigameInitialized = False;
             self.isGoingToWinLoseScreen = True;
             self.isTransitioning = True;
@@ -111,12 +111,20 @@ class Game_Instance:
 
         #Event fires when time ends for win/lose screen, shows minigame number
         if eventId == self.GO_TO_TRANSITION:
+
+            #Check to see if we lose before going onto next minigame
+            if(self.losses >= 3 and not (self.PLAY_TESTING_MODE or self.STABILITY_TESTING_MODE)):
+                #Switich to transition to end menu
+                pg.event.post(pg.event.Event(pg.QUIT));
+                return
+
             self.minigameNumber = self.minigameNumber + 1;
             self.isGoingToWinLoseScreen = False;
             pg.time.set_timer(self.ADVANCE_TO_MINI, self.transitionCurrentDuration, 1);
 
         #Event fires when transition is done, loads next minigame
         if eventId == self.ADVANCE_TO_MINI:
+            
             self.currentRunningMinigame = self.minigameQueue.getFromMinigameQueue();
             while(not self.minigameQueue.isFull()):
                 self.minigameQueue.addToMinigameQueue(self.addRandomMinigame());
@@ -124,7 +132,7 @@ class Game_Instance:
             #Fail-safe if queue is somehow empty at loading
             if(self.currentRunningMinigame == None):
                 print("Minigame failed to load");
-                pg.time.set_timer(pg.QUIT, 1, 1);
+                pg.event.post(pg.event.Event(pg.QUIT));
                 return
 
             self.isTransitioning = False;
