@@ -5,20 +5,23 @@ import json
 pg.font.init()
 
 from Game_Instance import Game_Instance
+from menu import Menu
 
 WIN = pg.display.set_mode((1280,720))
 WIDTH, HEIGHT = WIN.get_width(), WIN.get_height()
 pg.display.set_caption("EDMEDLEY")
+SCALE = 0.2;
 
 path_to_script = os.path.dirname(os.path.abspath(__file__))
 save_file_path = os.path.join(path_to_script, "save_file.json")
 save_data={}
 
 NEXT_MINI = pg.USEREVENT + 1;
-GO_TO_TRANSITION = pg.USEREVENT + 2
+GO_TO_TRANSITION = pg.USEREVENT + 2;
 ADVANCE_TO_MINI = pg.USEREVENT + 3;
-
-SCALE = 0.2;
+DISP_MAIN_MENU = pg.USEREVENT + 11;
+DISP_GAME_SELECT = pg.USEREVENT + 12;
+START_GAME = pg.USEREVENT + 13;
 
 def save(data):
     with open(save_file_path, "w") as save_file:
@@ -46,10 +49,8 @@ def main():
     clock = pg.time.Clock();
     
     run = True;
-
-    listOfMinigames = ['car', 'spell', 'animals']
-
-    Game = Game_Instance(WIN, SCALE, listOfMinigames, NEXT_MINI, GO_TO_TRANSITION, ADVANCE_TO_MINI, False, False);
+    playing_game = False
+    GameMenu = Menu(WIN, DISP_MAIN_MENU, DISP_GAME_SELECT, START_GAME)
 
     while run:
         clock.tick(30)
@@ -66,6 +67,18 @@ def main():
             if event.type == ADVANCE_TO_MINI:
                 Game.stateHandlerGameInstance(ADVANCE_TO_MINI);
 
+            if event.type == DISP_MAIN_MENU:
+                playing_game=False
+                GameMenu.eventHandler(DISP_MAIN_MENU);
+
+            if event.type == DISP_GAME_SELECT:
+                playing_game=False
+                GameMenu.eventHandler(DISP_GAME_SELECT);
+            
+            if event.type == START_GAME:
+                playing_game=True
+                Game = Game_Instance(WIN, SCALE, GameMenu.listOfMinigames, NEXT_MINI, GO_TO_TRANSITION, ADVANCE_TO_MINI, False, False);
+                
             if event.type == pg.QUIT:
                 run = False
             
@@ -73,13 +86,12 @@ def main():
                 if event.key == pg.K_ESCAPE:
                     run = False
 
-        Game.tickGameInstance()
-        if Game.getScore() > save_data["high score"]:
-            save_data["high score"] = Game.getScore()
-
+        if playing_game:
+            Game.tickGameInstance()
+            if Game.getScore() > save_data["high score"]:
+                save_data["high score"] = Game.getScore()
 
     save(save_data)
-
     pg.quit()
 
 if __name__ == "__main__":
