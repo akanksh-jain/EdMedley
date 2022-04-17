@@ -22,6 +22,7 @@ ADVANCE_TO_MINI = pg.USEREVENT + 3;
 DISP_MAIN_MENU = pg.USEREVENT + 11;
 DISP_GAME_SELECT = pg.USEREVENT + 12;
 START_GAME = pg.USEREVENT + 13;
+DISP_END_SCREEN = pg.USEREVENT + 14;
 
 def save(data):
     with open(save_file_path, "w") as save_file:
@@ -50,7 +51,7 @@ def main():
     
     run = True;
     playing_game = False
-    GameMenu = Menu(WIN, DISP_MAIN_MENU, DISP_GAME_SELECT, START_GAME)
+    GameMenu = Menu(WIN, DISP_MAIN_MENU, DISP_GAME_SELECT, START_GAME, DISP_END_SCREEN)
 
     while run:
         clock.tick(30)
@@ -69,16 +70,21 @@ def main():
 
             if event.type == DISP_MAIN_MENU:
                 playing_game=False
-                GameMenu.eventHandler(DISP_MAIN_MENU);
+                GameMenu.displayMainMenu();
 
             if event.type == DISP_GAME_SELECT:
                 playing_game=False
-                GameMenu.eventHandler(DISP_GAME_SELECT);
+                GameMenu.displayGameSelect();
             
             if event.type == START_GAME:
                 playing_game=True
-                Game = Game_Instance(WIN, SCALE, GameMenu.listOfMinigames, NEXT_MINI, GO_TO_TRANSITION, ADVANCE_TO_MINI, False, False);
-                
+                Game = Game_Instance(WIN, SCALE, GameMenu.listOfMinigames, NEXT_MINI, GO_TO_TRANSITION, ADVANCE_TO_MINI, DISP_END_SCREEN, False, False);
+
+            if event.type == DISP_END_SCREEN:
+                playing_game=False
+                save(save_data)
+                GameMenu.displayEndScreen(Game.getScore(), save_data["high score"])
+
             if event.type == pg.QUIT:
                 run = False
             
@@ -88,8 +94,9 @@ def main():
 
         if playing_game:
             Game.tickGameInstance()
-            if Game.getScore() > save_data["high score"]:
-                save_data["high score"] = Game.getScore()
+            currentScore=Game.getScore()
+            if currentScore > save_data["high score"]:
+                save_data["high score"] = currentScore
 
     save(save_data)
     pg.quit()
