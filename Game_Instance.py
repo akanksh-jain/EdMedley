@@ -9,7 +9,7 @@ from Animals_Minigame import Animals_Minigame
 
 class Game_Instance:
     
-    def __init__(self, WIN, SCALE, LIST_OF_MINIGAMES, NEXT_MINI, GO_TO_TRANSITION, ADVANCE_TO_MINI, PLAY_TESTING_MODE, STABILITY_TESTING_MODE):
+    def __init__(self, WIN, SCALE, LIST_OF_MINIGAMES, NEXT_MINI, GO_TO_TRANSITION, ADVANCE_TO_MINI, DISP_END_SCREEN, PLAY_TESTING_MODE, STABILITY_TESTING_MODE):
         self.WIN = WIN;
         self.SCALE = SCALE;
         self.listOfMinigames = LIST_OF_MINIGAMES;
@@ -22,6 +22,7 @@ class Game_Instance:
         self.NEXT_MINI = NEXT_MINI;
         self.GO_TO_TRANSITION = GO_TO_TRANSITION;
         self.ADVANCE_TO_MINI = ADVANCE_TO_MINI;
+        self.DISP_END_SCREEN = DISP_END_SCREEN;
 
         #States for the Game Instance
         self.isMinigameInitialized = False;
@@ -62,14 +63,13 @@ class Game_Instance:
         return
 
     def tickGameInstance(self):
-
         #Checks if application is in minigame playing mode 
         if(self.isMinigameInitialized):
             if(self.currentRunningMinigame != None):
                 self.currentRunningMinigame.run_minigame();
             else:
                 #Probably change to a stop minigames, return to menu event
-                pg.time.set_timer(pg.QUIT, 1, 1);
+                pg.event.post(pg.event.Event(pg.QUIT));
                 return
             self.firstTransition=True #constantly sets to true but only needs to do so once when the next minigame loads/could be made more efficient
             self.lastMinigameAnswer = self.currentRunningMinigame.correctAnswer() #same issue as above but with the answer key
@@ -98,6 +98,7 @@ class Game_Instance:
     def stateHandlerGameInstance(self, eventId):
         #Event fires when the minigame ends, shows scores and win/lose
         if eventId == self.NEXT_MINI:
+
             self.isMinigameInitialized = False;
             self.isGoingToWinLoseScreen = True;
             self.isTransitioning = True;
@@ -111,12 +112,20 @@ class Game_Instance:
 
         #Event fires when time ends for win/lose screen, shows minigame number
         if eventId == self.GO_TO_TRANSITION:
+
+            #Check to see if we lose before going onto next minigame
+            if(self.losses >= 3 and not (self.PLAY_TESTING_MODE or self.STABILITY_TESTING_MODE)):
+                #Switich to transition to end menu
+                pg.event.post(pg.event.Event(self.DISP_END_SCREEN));
+                return
+            
             self.minigameNumber = self.minigameNumber + 1;
             self.isGoingToWinLoseScreen = False;
             pg.time.set_timer(self.ADVANCE_TO_MINI, self.transitionCurrentDuration, 1);
 
         #Event fires when transition is done, loads next minigame
         if eventId == self.ADVANCE_TO_MINI:
+            
             self.currentRunningMinigame = self.minigameQueue.getFromMinigameQueue();
             while(not self.minigameQueue.isFull()):
                 self.minigameQueue.addToMinigameQueue(self.addRandomMinigame());
@@ -124,7 +133,7 @@ class Game_Instance:
             #Fail-safe if queue is somehow empty at loading
             if(self.currentRunningMinigame == None):
                 print("Minigame failed to load");
-                pg.time.set_timer(pg.QUIT, 1, 1);
+                pg.event.post(pg.event.Event(pg.QUIT));
                 return
 
             self.isTransitioning = False;
@@ -185,7 +194,10 @@ class Game_Instance:
     def durationCalculator(self, startDuration, endDuration):
         if(self.minigameNumber >= 30):
             return endDuration;
-        return int(endDuration + (startDuration - endDuration) * pow(2, -0.25 * self.minigameNumber));
+        result = int(endDuration + (startDuration - endDuration) * pow(2, -0.25 * self.minigameNumber));
+        if(result <= 0):
+            return 1;
+        return result;
 
     def addRandomMinigame(self):
         length = len(self.listOfMinigames);

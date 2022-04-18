@@ -14,7 +14,7 @@ class Animals_Minigame(Minigame):
         self.HEIGHT = WIN.get_height();
 
         self.imageSet = {};
-        self.loadImages(['Detective_room.png', 'Mag_glass.png', 'Fish.png', 'Frog.png', 'Giraffe.png', 'Ladybug.png', 'Bird.png', 'Seagull.png', 'Lizard.png', 'Ant.png', 'Dolphin.png', 'Monkey.png', 'Snake.png', 'Axolotl.png', 'Swordfish.png']);
+        self.loadImages(['Detective_room.png', 'Mag_glass.png']);
         self.transformImages();
 
         self.CURRENT_POS = 0;
@@ -30,18 +30,62 @@ class Animals_Minigame(Minigame):
         self.createAnswerChoices();
 
     def transformImages(self):
-        self.initScaleImage('Fish', 1, 1)
         self.initScaleImage('Mag_glass', 2, 2.5)
-        self.initScaleImage('Frog', 1.5, 1.5)
-        self.initScaleImage('Axolotl', 1.5, 1.5)
-        self.initScaleImage('Snake', 1.5, 1.5)
-        self.initScaleImage('Swordfish', 1.8, 1.8)
-        self.initScaleImage('Dolphin', 1.5, 1.5)
-        self.initScaleImage('Monkey', 2, 2.5)
-        self.initScaleImage('Ant', 2, 2)
+        
+    def transformAnimalImages(self, animal1, animal2, animal3):
+        if animal1 == 'Fish':
+            self.initScaleImage('Fish', 1, 1)
+        elif animal1 == 'Frog':
+            self.initScaleImage('Frog', 1.5, 1.5)
+        elif animal1 == 'Axolotl':
+            self.initScaleImage('Axolotl', 1.5, 1.5)
+        elif animal1 == 'Snake':
+            self.initScaleImage('Snake', 1.5, 1.5)
+        elif animal1 == 'Swordfish':
+            self.initScaleImage('Swordfish', 1.8, 1.8)
+        elif animal1 == 'Dolphin':
+            self.initScaleImage('Dolphin', 1.5, 1.5)
+        elif animal1 == 'Monkey':
+            self.initScaleImage('Monkey', 2, 2.5)
+        elif animal1 == 'Ant':
+            self.initScaleImage('Ant', 2, 2)
+
+        if animal2 == 'Fish':
+            self.initScaleImage('Fish', 1, 1)
+        elif animal2 == 'Frog':
+            self.initScaleImage('Frog', 1.5, 1.5)
+        elif animal2 == 'Axolotl':
+            self.initScaleImage('Axolotl', 1.5, 1.5)
+        elif animal2 == 'Snake':
+            self.initScaleImage('Snake', 1.5, 1.5)
+        elif animal2 == 'Swordfish':
+            self.initScaleImage('Swordfish', 1.8, 1.8)
+        elif animal2 == 'Dolphin':
+            self.initScaleImage('Dolphin', 1.5, 1.5)
+        elif animal2 == 'Monkey':
+            self.initScaleImage('Monkey', 2, 2.5)
+        elif animal2 == 'Ant':
+            self.initScaleImage('Ant', 2, 2)
+
+        if animal3 == 'Fish':
+            self.initScaleImage('Fish', 1, 1)
+        elif animal3 == 'Frog':
+            self.initScaleImage('Frog', 1.5, 1.5)
+        elif animal3 == 'Axolotl':
+            self.initScaleImage('Axolotl', 1.5, 1.5)
+        elif animal3 == 'Snake':
+            self.initScaleImage('Snake', 1.5, 1.5)
+        elif animal3 == 'Swordfish':
+            self.initScaleImage('Swordfish', 1.8, 1.8)
+        elif animal3 == 'Dolphin':
+            self.initScaleImage('Dolphin', 1.5, 1.5)
+        elif animal3 == 'Monkey':
+            self.initScaleImage('Monkey', 2, 2.5)
+        elif animal3 == 'Ant':
+            self.initScaleImage('Ant', 2, 2)
 
     def createObjects(self):
-        self.background = pg.transform.scale(pg.image.load(os.path.join('Assets', 'Detective_room.png')), (1280,720))
+        self.background = pg.transform.scale(self.imageSet['Detective_room'], (1280,720))
         self.mag_glass = self.initImageObjectRect('Mag_glass', (self.WIDTH // 2 - self.imageSet['Mag_glass'].get_width() // 2) + 50, (int)(self.HEIGHT * .6) - self.imageSet['Mag_glass'].get_height() // 2)
 
 
@@ -61,10 +105,6 @@ class Animals_Minigame(Minigame):
 
         self.tutorial_rect = self.tutorial_text.get_rect()
         self.tutorial_rect.center = (600,50)
-
-    def startRunningMinigame(self):
-        print("New Minigame")
-        pg.time.set_timer(self.NEXT_MINI, self.duration, 1);
 
     def run_minigame(self):
         keys_pressed = pg.key.get_pressed()
@@ -156,7 +196,13 @@ class Animals_Minigame(Minigame):
 
         self.createTutorialText(question_mode)
 
+    def loadAnimals(self, animal1, animal2, animal3):
+        self.loadImages([animal1 + '.png', animal2 + '.png', animal3 + '.png'])
+        self.transformAnimalImages(animal1,animal2, animal3)
+
+
     def createAnimalObjects(self, animal1, animal2, animal3):
+        self.loadAnimals(animal1, animal2, animal3)
         if animal1 == 'Fish':
             self.animalname1 = 'Fish'
             self.animal1 = self.initImageObjectRect('Fish', self.WIDTH, self.HEIGHT)
