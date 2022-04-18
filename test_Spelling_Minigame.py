@@ -31,11 +31,6 @@ class Test_minigame:
         testMinigame = Spelling_Minigame(WIN, SCALE, NEXT_MINI, duration);
         assert(testMinigame.loadImages(['pencil.png', 'doesntNotExist.png'])) == None;
 
-    #Testing that loading no images works.
-    def test_4(self):
-        testMinigame = Spelling_Minigame(WIN, SCALE, NEXT_MINI, duration);
-        assert(testMinigame.loadImages([])) == None;
-
     #Testing that existing image can scale.
     def test_5(self):
         testMinigame = Spelling_Minigame(WIN, SCALE, NEXT_MINI, duration);
