@@ -9,7 +9,7 @@ from Animals_Minigame import Animals_Minigame
 
 class Game_Instance:
     
-    def __init__(self, WIN, SCALE, LIST_OF_MINIGAMES, NEXT_MINI, GO_TO_TRANSITION, ADVANCE_TO_MINI, PLAY_TESTING_MODE, STABILITY_TESTING_MODE):
+    def __init__(self, WIN, SCALE, LIST_OF_MINIGAMES, NEXT_MINI, GO_TO_TRANSITION, ADVANCE_TO_MINI, DISP_END_SCREEN, PLAY_TESTING_MODE, STABILITY_TESTING_MODE):
         self.WIN = WIN;
         self.SCALE = SCALE;
         self.listOfMinigames = LIST_OF_MINIGAMES;
@@ -22,6 +22,7 @@ class Game_Instance:
         self.NEXT_MINI = NEXT_MINI;
         self.GO_TO_TRANSITION = GO_TO_TRANSITION;
         self.ADVANCE_TO_MINI = ADVANCE_TO_MINI;
+        self.DISP_END_SCREEN = DISP_END_SCREEN;
 
         #States for the Game Instance
         self.isMinigameInitialized = False;
@@ -115,9 +116,9 @@ class Game_Instance:
             #Check to see if we lose before going onto next minigame
             if(self.losses >= 3 and not (self.PLAY_TESTING_MODE or self.STABILITY_TESTING_MODE)):
                 #Switich to transition to end menu
-                pg.event.post(pg.event.Event(pg.QUIT));
+                pg.event.post(pg.event.Event(self.DISP_END_SCREEN));
                 return
-
+            
             self.minigameNumber = self.minigameNumber + 1;
             self.isGoingToWinLoseScreen = False;
             pg.time.set_timer(self.ADVANCE_TO_MINI, self.transitionCurrentDuration, 1);
