@@ -55,23 +55,25 @@ class Menu():
             pg.display.update()
 
     def displayGameSelect(self):
+        car_btn = Button(image=pg.image.load("Assets/Car_thumbnail.png"), pos=(self.mid_w-400, self.mid_h), 
+                        text_input="", font=get_font(60), base_color="#d7fcd4", hovering_color="White", image2=pg.image.load("Assets/Car_thumbnail_outline.png"))
+        animal_btn = Button(image=pg.image.load("Assets/Animal_thumbnail.png"), pos=(self.mid_w, self.mid_h), 
+                        text_input="", font=get_font(60), base_color="#d7fcd4", hovering_color="White", image2=pg.image.load("Assets/Animal_thumbnail_outline.png"))
+        spelling_btn = Button(image=pg.image.load("Assets/Spelling_thumbnail.png"), pos=(self.mid_w+400, self.mid_h), 
+                        text_input="", font=get_font(60), base_color="#d7fcd4", hovering_color="White", image2=pg.image.load("Assets/Spelling_thumbnail_outline.png"))
+        back_btn = Button(image=pg.image.load("Assets/Back_Rect.png"), pos=(self.mid_w-500, self.mid_h+250), 
+                        text_input="BACK", font=get_font(40), base_color="#d7fcd4", hovering_color="White")                
+        start_btn = Button(image=pg.image.load("Assets/Start_Rect.png"), pos=(self.mid_w+500, self.mid_h+250), 
+                        text_input="START", font=get_font(40), base_color="#d7fcd4", hovering_color="White")
+
         run_game_select_display = True
+        backgroundImage = pg.image.load("Assets/background.png")
         while run_game_select_display:
-            self.WIN.blit(pg.image.load("Assets/background.png"), (0,0))
+            self.WIN.blit(backgroundImage, (0,0))
             title_text = get_font(80).render("Game Select", True, "#b68f40")
             title_rect = title_text.get_rect(center=(self.mid_w, self.mid_h-200))
             self.WIN.blit(title_text, title_rect)
 
-            car_btn = Button(image=pg.image.load("Assets/Car_thumbnail.png"), pos=(self.mid_w-400, self.mid_h), 
-                            text_input="", font=get_font(60), base_color="#d7fcd4", hovering_color="White", image2=pg.image.load("Assets/Car_thumbnail_outline.png"))
-            animal_btn = Button(image=pg.image.load("Assets/Animal_thumbnail.png"), pos=(self.mid_w, self.mid_h), 
-                            text_input="", font=get_font(60), base_color="#d7fcd4", hovering_color="White", image2=pg.image.load("Assets/Animal_thumbnail_outline.png"))
-            spelling_btn = Button(image=pg.image.load("Assets/Spelling_thumbnail.png"), pos=(self.mid_w+400, self.mid_h), 
-                            text_input="", font=get_font(60), base_color="#d7fcd4", hovering_color="White", image2=pg.image.load("Assets/Spelling_thumbnail_outline.png"))
-            back_btn = Button(image=pg.image.load("Assets/Back_Rect.png"), pos=(self.mid_w-500, self.mid_h+250), 
-                            text_input="BACK", font=get_font(40), base_color="#d7fcd4", hovering_color="White")                
-            start_btn = Button(image=pg.image.load("Assets/Start_Rect.png"), pos=(self.mid_w+500, self.mid_h+250), 
-                            text_input="START", font=get_font(40), base_color="#d7fcd4", hovering_color="White")
 
             mouse_pos = pg.mouse.get_pos()
             for button in [car_btn, animal_btn, spelling_btn, back_btn, start_btn]:
@@ -113,9 +115,15 @@ class Menu():
             pg.display.update()
 
     def displayEndScreen(self, currentScore, highScore):
+        play_again_btn = Button(image=pg.image.load("Assets/Play_Again_Rect.png"), pos=(self.mid_w+400, self.mid_h+270), 
+                        text_input="PLAY AGAIN", font=get_font(40), base_color="#d7fcd4", hovering_color="White")
+        home_btn = Button(image=pg.image.load("Assets/Back_Rect.png"), pos=(self.mid_w-500, self.mid_h+270), 
+                        text_input="HOME", font=get_font(40), base_color="#d7fcd4", hovering_color="White")
+
+        backgroundImage = pg.image.load("Assets/background.png");
         run_end_screen_display = True
         while run_end_screen_display:
-            self.WIN.blit(pg.image.load("Assets/background.png"), (0,0))
+            self.WIN.blit(backgroundImage, (0,0))
 
             title_text = get_font(100).render("GAME OVER", True, "#b68f40")
             title_rect = title_text.get_rect(center=(self.mid_w, self.mid_h-200))
@@ -145,10 +153,6 @@ class Menu():
             high_score_rect3 = high_score_text3.get_rect(center=(self.mid_w+310, self.mid_h-60 + high_score_text1.get_height() + high_score_text2.get_height()))
             self.WIN.blit(high_score_text3, high_score_rect3)
 
-            play_again_btn = Button(image=pg.image.load("Assets/Play_Again_Rect.png"), pos=(self.mid_w+400, self.mid_h+270), 
-                            text_input="PLAY AGAIN", font=get_font(40), base_color="#d7fcd4", hovering_color="White")
-            home_btn = Button(image=pg.image.load("Assets/Back_Rect.png"), pos=(self.mid_w-500, self.mid_h+270), 
-                            text_input="HOME", font=get_font(40), base_color="#d7fcd4", hovering_color="White")
             
             mouse_pos = pg.mouse.get_pos()
             for button in [play_again_btn, home_btn]:

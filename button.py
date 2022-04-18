@@ -19,7 +19,7 @@ class Button():
 
 	def update(self, screen):
 		if self.image is not None:
-			if self.hovering:
+			if self.hovering or self.selected:
 				screen.blit(self.image2, self.rect2)
 			else:
 				screen.blit(self.image, self.rect)
@@ -30,6 +30,7 @@ class Button():
 		if position[0] in range(self.rect.left, self.rect.right) and position[1] in range(self.rect.top, self.rect.bottom):
 			if self.image2 is not None:
 				self.selected = not self.selected
+				print(self.selected)
 			return True
 		return False
 

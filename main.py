@@ -51,7 +51,7 @@ def main():
     
     run = True;
     playing_game = False
-    GameMenu = Menu(WIN, DISP_MAIN_MENU, DISP_GAME_SELECT, START_GAME, DISP_END_SCREEN)
+    GameMenu = Menu(WIN, DISP_MAIN_MENU, DISP_GAME_SELECT, START_GAME)
 
     while run:
         clock.tick(30)
