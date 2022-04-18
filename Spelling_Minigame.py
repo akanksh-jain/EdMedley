@@ -19,8 +19,6 @@ class Spelling_Minigame(Minigame):
         self.transformImages();
 
         self.CURRENT_POS = 0;
-        self.rumbleUp = True;
-        self.rumbleDistance = 2;
         self.move_timer = 100;
         self.tutorial_timer = 0;
 
@@ -37,7 +35,7 @@ class Spelling_Minigame(Minigame):
         self.initScaleImage('pencil', 0.9, 1)
 
     def createObjects(self):
-        self.pencil = self.initImageObjectRect('pencil', self.WIDTH // 2 - self.imageSet['pencil'].get_width() // 2,(int)(self.HEIGHT * .75) - self.imageSet['pencil'].get_height() // 2 - self.rumbleDistance // 2)
+        self.pencil = self.initImageObjectRect('pencil', self.WIDTH // 2 - self.imageSet['pencil'].get_width() // 2,(int)(self.HEIGHT * .75) - self.imageSet['pencil'].get_height() // 2 )
         self.background = pg.transform.scale(pg.image.load(os.path.join('Assets','notebook_background.png')),(1280,720))
     
     def createTutorialText(self):
@@ -89,7 +87,7 @@ class Spelling_Minigame(Minigame):
     
     def createAnswerChoices(self):
         #the correct answer will be in the first position
-        question_bank = [["spelling","speling","speeling"],["crayon","krayon","craon"],["paraphrase","paraphase","parafrase"],["rewrite","rewrit","riwrite"],["root","rott","roat"],["usage","usige","usege"],["verify","veerify","verrify"],["claim","claime","claym"],["prose","proase","prosse"],["perform","prefform","perfform"],["repetition","reptition",'wrepition'],["pitch","petch","pitsh"],["consequences","consaquences","consequnses"],["beautiful","beeutiful","beutiful"],["country","kountry","countree"],["against","agenst","againts"],["oppose","oposse","opposse"],["dominant","domenant","domiant"],["straight","straitt","straigt"],["although","altho","altough"]]
+        question_bank = [["spelling","speling","speeling"],["crayon","krayon","craon"],["paraphrase","paraphase","parafrase"],["rewrite","rewrit","riwrite"],["root","rott","roat"],["usage","usige","usege"],["verify","veerify","verrify"],["claim","claime","claym"],["prose","proase","prosse"],["perform","prefform","perfform"],["repetition","reptition",'wrepition'],["pitch","petch","pitsh"],["beautiful","beeutiful","beutiful"],["country","kountry","countree"],["against","agenst","againts"],["oppose","oposse","opposse"],["dominant","domenant","domiant"],["straight","straitt","straigt"],["although","altho","altough"]]
         question=random.randint(0,len(question_bank)-1)
         self.answerKey = random.randint(1,5) % 3 + 1
         if(self.answerKey == 1):
