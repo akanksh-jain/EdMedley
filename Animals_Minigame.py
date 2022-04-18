@@ -14,7 +14,7 @@ class Animals_Minigame(Minigame):
         self.HEIGHT = WIN.get_height();
 
         self.imageSet = {};
-        self.loadImages(['Detective_room.png', 'Mag_glass.png','Fish.png', 'Frog.png','Giraffe.png', 'Ladybug.png', 'Bird.png', 'Seagull.png', 'Lizard.png']);
+        self.loadImages(['Detective_room.png', 'Mag_glass.png']);
         self.transformImages();
 
         self.CURRENT_POS = 0;
@@ -30,12 +30,62 @@ class Animals_Minigame(Minigame):
         self.createAnswerChoices();
 
     def transformImages(self):
-        self.initScaleImage('Fish', 1, 1)
         self.initScaleImage('Mag_glass', 2, 2.5)
-        self.initScaleImage('Frog', 1.5, 1.5)
+        
+    def transformAnimalImages(self, animal1, animal2, animal3):
+        if animal1 == 'Fish':
+            self.initScaleImage('Fish', 1, 1)
+        elif animal1 == 'Frog':
+            self.initScaleImage('Frog', 1.5, 1.5)
+        elif animal1 == 'Axolotl':
+            self.initScaleImage('Axolotl', 1.5, 1.5)
+        elif animal1 == 'Snake':
+            self.initScaleImage('Snake', 1.5, 1.5)
+        elif animal1 == 'Swordfish':
+            self.initScaleImage('Swordfish', 1.8, 1.8)
+        elif animal1 == 'Dolphin':
+            self.initScaleImage('Dolphin', 1.5, 1.5)
+        elif animal1 == 'Monkey':
+            self.initScaleImage('Monkey', 2, 2.5)
+        elif animal1 == 'Ant':
+            self.initScaleImage('Ant', 2, 2)
+
+        if animal2 == 'Fish':
+            self.initScaleImage('Fish', 1, 1)
+        elif animal2 == 'Frog':
+            self.initScaleImage('Frog', 1.5, 1.5)
+        elif animal2 == 'Axolotl':
+            self.initScaleImage('Axolotl', 1.5, 1.5)
+        elif animal2 == 'Snake':
+            self.initScaleImage('Snake', 1.5, 1.5)
+        elif animal2 == 'Swordfish':
+            self.initScaleImage('Swordfish', 1.8, 1.8)
+        elif animal2 == 'Dolphin':
+            self.initScaleImage('Dolphin', 1.5, 1.5)
+        elif animal2 == 'Monkey':
+            self.initScaleImage('Monkey', 2, 2.5)
+        elif animal2 == 'Ant':
+            self.initScaleImage('Ant', 2, 2)
+
+        if animal3 == 'Fish':
+            self.initScaleImage('Fish', 1, 1)
+        elif animal3 == 'Frog':
+            self.initScaleImage('Frog', 1.5, 1.5)
+        elif animal3 == 'Axolotl':
+            self.initScaleImage('Axolotl', 1.5, 1.5)
+        elif animal3 == 'Snake':
+            self.initScaleImage('Snake', 1.5, 1.5)
+        elif animal3 == 'Swordfish':
+            self.initScaleImage('Swordfish', 1.8, 1.8)
+        elif animal3 == 'Dolphin':
+            self.initScaleImage('Dolphin', 1.5, 1.5)
+        elif animal3 == 'Monkey':
+            self.initScaleImage('Monkey', 2, 2.5)
+        elif animal3 == 'Ant':
+            self.initScaleImage('Ant', 2, 2)
 
     def createObjects(self):
-        self.background = pg.transform.scale(pg.image.load(os.path.join('Assets', 'Detective_room.png')), (1280,720))
+        self.background = pg.transform.scale(self.imageSet['Detective_room'], (1280,720))
         self.mag_glass = self.initImageObjectRect('Mag_glass', (self.WIDTH // 2 - self.imageSet['Mag_glass'].get_width() // 2) + 50, (int)(self.HEIGHT * .6) - self.imageSet['Mag_glass'].get_height() // 2)
 
 
@@ -55,10 +105,6 @@ class Animals_Minigame(Minigame):
 
         self.tutorial_rect = self.tutorial_text.get_rect()
         self.tutorial_rect.center = (600,50)
-
-    def startRunningMinigame(self):
-        print("New Minigame")
-        pg.time.set_timer(self.NEXT_MINI, self.duration, 1);
 
     def run_minigame(self):
         keys_pressed = pg.key.get_pressed()
@@ -103,11 +149,11 @@ class Animals_Minigame(Minigame):
     def createAnswerChoices(self):
         question_mode = random.randint(0,5)
         birds = ['Seagull', 'Bird']
-        mammals = ['Giraffe']
-        reptiles = ['Lizard']
-        insects = ['Ladybug']
-        fish = ['Fish']
-        amphibian = ['Frog']
+        mammals = ['Giraffe', 'Dolphin', 'Monkey']
+        reptiles = ['Lizard', 'Snake']
+        insects = ['Ladybug', 'Ant']
+        fish = ['Fish', 'Swordfish']
+        amphibian = ['Frog', 'Axolotl']
 
         if question_mode == 0:
             possible_wrong = [mammals, reptiles, insects, fish, amphibian];
@@ -150,7 +196,13 @@ class Animals_Minigame(Minigame):
 
         self.createTutorialText(question_mode)
 
+    def loadAnimals(self, animal1, animal2, animal3):
+        self.loadImages([animal1 + '.png', animal2 + '.png', animal3 + '.png'])
+        self.transformAnimalImages(animal1,animal2, animal3)
+
+
     def createAnimalObjects(self, animal1, animal2, animal3):
+        self.loadAnimals(animal1, animal2, animal3)
         if animal1 == 'Fish':
             self.animalname1 = 'Fish'
             self.animal1 = self.initImageObjectRect('Fish', self.WIDTH, self.HEIGHT)
@@ -172,8 +224,25 @@ class Animals_Minigame(Minigame):
         elif animal1 == 'Ladybug':
             self.animalname1 = 'Ladybug'
             self.animal1 = self.ladybug = self.initImageObjectRect('Ladybug', self.WIDTH, self.HEIGHT)
+        elif animal1 == 'Monkey':
+            self.animalname1 = 'Monkey'
+            self.animal1 = self.monkey = self.initImageObjectRect('Monkey', self.WIDTH, self.HEIGHT)
+        elif animal1 == 'Dolphin':
+            self.animalname1 = 'Dolphin'
+            self.animal1 = self.dolphin = self.initImageObjectRect('Dolphin', self.WIDTH, self.HEIGHT)
+        elif animal1 == 'Ant':
+            self.animalname1 = 'Ant'
+            self.animal1 = self.ant = self.initImageObjectRect('Ant', self.WIDTH, self.HEIGHT)
+        elif animal1 == 'Snake':
+            self.animalname1 = 'Snake'
+            self.animal1 = self.snake = self.initImageObjectRect('Snake', self.WIDTH, self.HEIGHT)
+        elif animal1 == 'Axolotl':
+            self.animalname1 = 'Axolotl'
+            self.animal1 = self.axolotl = self.initImageObjectRect('Axolotl', self.WIDTH, self.HEIGHT)
+        elif animal1 == 'Swordfish':
+            self.animalname1 = 'Swordfish'
+            self.animal1 = self.swordfish = self.initImageObjectRect('Swordfish', self.WIDTH, self.HEIGHT)
         
-        #self.animal1 = self.initImageObjectRect(animal1, 250, 250);
         self.animal1.center = (213, 400);
 
         if animal2 == 'Fish':
@@ -197,7 +266,25 @@ class Animals_Minigame(Minigame):
         elif animal2 == 'Ladybug':
             self.animalname2 = 'Ladybug'
             self.animal2 = self.ladybug = self.initImageObjectRect('Ladybug', self.WIDTH, self.HEIGHT)
-        #self.animal2 = self.initImageObjectRect(animal2, 250, 250);
+        elif animal2 == 'Monkey':
+            self.animalname2 = 'Monkey'
+            self.animal2 = self.monkey = self.initImageObjectRect('Monkey', self.WIDTH, self.HEIGHT)
+        elif animal2 == 'Dolphin':
+            self.animalname2 = 'Dolphin'
+            self.animal2 = self.dolphin = self.initImageObjectRect('Dolphin', self.WIDTH, self.HEIGHT)
+        elif animal2 == 'Ant':
+            self.animalname2 = 'Ant'
+            self.animal2 = self.ant = self.initImageObjectRect('Ant', self.WIDTH, self.HEIGHT)
+        elif animal2 == 'Snake':
+            self.animalname2 = 'Snake'
+            self.animal2 = self.snake = self.initImageObjectRect('Snake', self.WIDTH, self.HEIGHT)
+        elif animal2 == 'Axolotl':
+            self.animalname2 = 'Axolotl'
+            self.animal2 = self.axolotl = self.initImageObjectRect('Axolotl', self.WIDTH, self.HEIGHT)
+        elif animal2 == 'Swordfish':
+            self.animalname2 = 'Swordfish'
+            self.animal2 = self.swordfish = self.initImageObjectRect('Swordfish', self.WIDTH, self.HEIGHT)
+        
         self.animal2.center = (640, 400);
 
         if animal3 == 'Fish':
@@ -221,7 +308,25 @@ class Animals_Minigame(Minigame):
         elif animal3 == 'Ladybug':
             self.animalname3 = 'Ladybug'
             self.animal3 = self.ladybug = self.initImageObjectRect('Ladybug', self.WIDTH, self.HEIGHT)
-        #self.animal3 = self.initImageObjectRect(animal3, 250, 250);
+        elif animal3 == 'Monkey':
+            self.animalname3 = 'Monkey'
+            self.animal3 = self.monkey = self.initImageObjectRect('Monkey', self.WIDTH, self.HEIGHT)
+        elif animal3 == 'Dolphin':
+            self.animalname3 = 'Dolphin'
+            self.animal3 = self.dolphin = self.initImageObjectRect('Dolphin', self.WIDTH, self.HEIGHT)
+        elif animal3 == 'Ant':
+            self.animalname3 = 'Ant'
+            self.animal3 = self.ant = self.initImageObjectRect('Ant', self.WIDTH, self.HEIGHT)
+        elif animal3 == 'Snake':
+            self.animalname3 = 'Snake'
+            self.animal3 = self.snake = self.initImageObjectRect('Snake', self.WIDTH, self.HEIGHT)
+        elif animal3 == 'Axolotl':
+            self.animalname3 = 'Axolotl'
+            self.animal3 = self.axolotl = self.initImageObjectRect('Axolotl', self.WIDTH, self.HEIGHT)
+        elif animal3 == 'Swordfish':
+            self.animalname3 = 'Swordfish'
+            self.animal3 = self.swordfish = self.initImageObjectRect('Swordfish', self.WIDTH, self.HEIGHT)
+        
         self.animal3.center = (1066, 400);
 
     def getMinigameTag(self):
