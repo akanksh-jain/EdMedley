@@ -7,13 +7,12 @@ def get_font(size): # Returns Press-Start-2P in the desired size
     return pg.font.Font("Assets/font.ttf", size)
 
 class Menu():
-    def __init__(self, WIN, DISP_MAIN_MENU, DISP_GAME_SELECT, START_GAME, DISP_END_SCREEN):
+    def __init__(self, WIN, DISP_MAIN_MENU, DISP_GAME_SELECT, START_GAME):
         self.WIN = WIN
         self.listOfMinigames = []
         self.DISP_MAIN_MENU = DISP_MAIN_MENU
         self.DISP_GAME_SELECT = DISP_GAME_SELECT
         self.START_GAME = START_GAME
-        self.DISP_END_SCREEN = DISP_END_SCREEN
         self.mid_w, self.mid_h = WIN.get_width() / 2, WIN.get_height() / 2
         pg.event.post(pg.event.Event(self.DISP_MAIN_MENU))
 
@@ -22,9 +21,7 @@ class Menu():
             self.displayMainMenu()
         if eventID == self.DISP_GAME_SELECT:
             self.displayGameSelect()
-        if eventID == self.DISP_END_SCREEN:
-            self.displayGameSelect()
-                
+            
     def displayMainMenu(self):
         run_main_menu_display = True
         while run_main_menu_display:
@@ -66,19 +63,20 @@ class Menu():
             self.WIN.blit(title_text, title_rect)
 
             car_btn = Button(image=pg.image.load("Assets/Car_thumbnail.png"), pos=(self.mid_w-400, self.mid_h), 
-                            text_input="", font=get_font(60), base_color="#d7fcd4", hovering_color="White")
+                            text_input="", font=get_font(60), base_color="#d7fcd4", hovering_color="White", image2=pg.image.load("Assets/Car_thumbnail_outline.png"))
             animal_btn = Button(image=pg.image.load("Assets/Animal_thumbnail.png"), pos=(self.mid_w, self.mid_h), 
-                            text_input="", font=get_font(60), base_color="#d7fcd4", hovering_color="White")
+                            text_input="", font=get_font(60), base_color="#d7fcd4", hovering_color="White", image2=pg.image.load("Assets/Animal_thumbnail_outline.png"))
             spelling_btn = Button(image=pg.image.load("Assets/Spelling_thumbnail.png"), pos=(self.mid_w+400, self.mid_h), 
-                            text_input="", font=get_font(60), base_color="#d7fcd4", hovering_color="White")
-            back_btn = Button(image=pg.image.load("Assets/Back_Rect.png"), pos=(self.mid_w-500, self.mid_h+270), 
+                            text_input="", font=get_font(60), base_color="#d7fcd4", hovering_color="White", image2=pg.image.load("Assets/Spelling_thumbnail_outline.png"))
+            back_btn = Button(image=pg.image.load("Assets/Back_Rect.png"), pos=(self.mid_w-500, self.mid_h+250), 
                             text_input="BACK", font=get_font(40), base_color="#d7fcd4", hovering_color="White")                
-            start_btn = Button(image=pg.image.load("Assets/Start_Rect.png"), pos=(self.mid_w+500, self.mid_h+270), 
+            start_btn = Button(image=pg.image.load("Assets/Start_Rect.png"), pos=(self.mid_w+500, self.mid_h+250), 
                             text_input="START", font=get_font(40), base_color="#d7fcd4", hovering_color="White")
 
             mouse_pos = pg.mouse.get_pos()
             for button in [car_btn, animal_btn, spelling_btn, back_btn, start_btn]:
                 button.changeColor(mouse_pos)
+                button.changeOutline(mouse_pos)
                 button.update(self.WIN)
             for event in pg.event.get():
                 if event.type == pg.QUIT:
@@ -86,16 +84,19 @@ class Menu():
                     sys.exit()
                 if event.type == pg.MOUSEBUTTONUP and event.button == 1:
                     if car_btn.checkForInput(mouse_pos):
+                        car_btn.update(self.WIN)
                         if "car" in self.listOfMinigames:
                             self.listOfMinigames.remove("car")
                         else:
                             self.listOfMinigames.append("car")
                     if animal_btn.checkForInput(mouse_pos):
+                        animal_btn.update(self.WIN)
                         if "animals" in self.listOfMinigames:
                             self.listOfMinigames.remove("animals")
                         else:
                             self.listOfMinigames.append("animals")
                     if spelling_btn.checkForInput(mouse_pos):
+                        spelling_btn.update(self.WIN)
                         if "spell" in self.listOfMinigames:
                             self.listOfMinigames.remove("spell")
                         else:
