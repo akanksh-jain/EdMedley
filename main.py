@@ -30,7 +30,6 @@ def save(data):
         save_file.close()
 
 def main():
-
     file = Path(save_file_path)
     file.touch(exist_ok=True)
     if os.stat(save_file_path).st_size == 0:

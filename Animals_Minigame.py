@@ -24,8 +24,8 @@ class Animals_Minigame(Minigame):
 
         if(not pg.font.get_init):
             pg.font.init;
-        self.font = pg.font.Font('freesansbold.ttf', 150);
-        self.tutorial_font = pg.font.Font('freesansbold.ttf', 100);
+        self.font = pg.font.Font('Assets/FreeSansBold.ttf', 150);
+        self.tutorial_font = pg.font.Font('Assets/FreeSansBold.ttf', 100);
 
         self.createObjects();
         self.createAnswerChoices();
@@ -149,8 +149,7 @@ class Animals_Minigame(Minigame):
     def handle_mag_glass_movement(self, keys_pressed):
         #only allow movement after 10 updates, so movement is not rapid
         if self.move_timer < 10:
-            quit
-        #check if left key clicked, moves glass to left position if not in furthest left position
+            return
         elif keys_pressed[pg.K_LEFT] and self.CURRENT_POS != -1:
             self.move_timer = 0
             self.CURRENT_POS = self.CURRENT_POS - 1;
