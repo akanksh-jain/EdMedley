@@ -19,8 +19,6 @@ class Spelling_Minigame(Minigame):
         self.transformImages();
 
         self.CURRENT_POS = 0;
-        self.rumbleUp = True;
-        self.rumbleDistance = 2;
         self.move_timer = 100;
         self.tutorial_timer = 0;
 
@@ -37,7 +35,7 @@ class Spelling_Minigame(Minigame):
         self.initScaleImage('pencil', 0.9, 1)
 
     def createObjects(self):
-        self.pencil = self.initImageObjectRect('pencil', self.WIDTH // 2 - self.imageSet['pencil'].get_width() // 2,(int)(self.HEIGHT * .75) - self.imageSet['pencil'].get_height() // 2 - self.rumbleDistance // 2)
+        self.pencil = self.initImageObjectRect('pencil', self.WIDTH // 2 - self.imageSet['pencil'].get_width() // 2,(int)(self.HEIGHT * .75) - self.imageSet['pencil'].get_height() // 2 )
         self.background = pg.transform.scale(pg.image.load(os.path.join('Assets','notebook_background.png')),(1280,720))
     
     def createTutorialText(self):
