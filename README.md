@@ -1,4 +1,4 @@
-# CEN-Project
+# EdMedley
 
 To play the game, go into "dist" folder, 
 then "main" folder, and scroll down and
