@@ -47,7 +47,7 @@ class Game_Instance:
         self.minigameQueue = Minigame_Queue(3);
 
         if(not pg.font.get_init):
-            pg.font.init;
+                pg.font.init;
         self.font = pg.font.Font('freesansbold.ttf', 150);
 
         while(not self.minigameQueue.isFull()):
