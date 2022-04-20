@@ -26,8 +26,8 @@ class Spelling_Minigame(Minigame):
         #Creates the fonts used for text
         if(not pg.font.get_init):
             pg.font.init;
-        self.font = pg.font.Font('freesansbold.ttf', 50);
-        self.tutorial_font = pg.font.Font('freesansbold.ttf', 80);
+        self.font = pg.font.Font('Assets/FreeSansBold.ttf', 50);
+        self.tutorial_font = pg.font.Font('Assets/FreeSansBold.ttf', 80);
 
         #Calls the functions to create the necessary objects
         self.createObjects();
@@ -82,6 +82,7 @@ class Spelling_Minigame(Minigame):
             return False
 
     #Moves the position of the pencil object accordingly
+        
     def handle_pencil_movement(self, keys_pressed):
         if self.move_timer<10:
             return

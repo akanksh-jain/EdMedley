@@ -30,7 +30,7 @@ class Game_Instance:
         self.isTransitioning = False;
         self.firstTransition = True; #Used to ensure that the score is updated only once, perhaps could be done cleaner with an event flag
 
-        self.minigameNumber = 0;
+        self.minigameNumber = 1;
 
         self.minigameCurrentDuration = MINIGAME_TESTING_MODE_SPEED
         self.transitionCurrentDuration = TRANSITION_TESTING_MODE_SPEED
@@ -48,7 +48,7 @@ class Game_Instance:
 
         if(not pg.font.get_init):
                 pg.font.init;
-        self.font = pg.font.Font('freesansbold.ttf', 150);
+        self.font = pg.font.Font('Assets/FreeSansBold.ttf', 150);
 
         while(not self.minigameQueue.isFull()):
             self.minigameQueue.addToMinigameQueue(self.addRandomMinigame());
@@ -84,7 +84,7 @@ class Game_Instance:
                         self.score+=1
                     else:
                         self.losses += 1;
-                        print(self.losses)
+                        # print(self.losses)
                     self.firstTransition = False;
                 scoreText, scoreRect = self.createScoreText()
                 winLoseText, winLoseRect = self.createWinLose()

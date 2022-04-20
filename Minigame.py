@@ -104,7 +104,7 @@ class Minigame(ABC):
 
     def startRunningMinigame(self):
         #Will need to change to event that moves the queue foward
-        print("New Minigame")
+        # print("New Minigame")
         pg.time.set_timer(self.NEXT_MINI, self.duration, 1);
 
     #Should tick the minigame forwards
