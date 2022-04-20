@@ -7,6 +7,7 @@ from Minigame import Minigame
 
 class Animals_Minigame(Minigame):
 
+    #define aniaml minigame, initilize images and fonts
     def __init__(self, WIN, SCALE, NEXT_MINI, duration):
         super().__init__(WIN, SCALE, NEXT_MINI, duration);
 
@@ -23,15 +24,17 @@ class Animals_Minigame(Minigame):
 
         if(not pg.font.get_init):
             pg.font.init;
-        self.font = pg.font.Font('freesansbold.ttf', 150);
-        self.tutorial_font = pg.font.Font('freesansbold.ttf', 100);
+        self.font = pg.font.Font('Assets/FreeSansBold.ttf', 150);
+        self.tutorial_font = pg.font.Font('Assets/FreeSansBold.ttf', 100);
 
         self.createObjects();
         self.createAnswerChoices();
 
+    #transform magnifying glass image
     def transformImages(self):
         self.initScaleImage('Mag_glass', 2, 2.5)
         
+    #transform the animal image depending on which animal is being shown on screen
     def transformAnimalImages(self, animal1, animal2, animal3):
         if animal1 == 'Fish':
             self.initScaleImage('Fish', 1, 1)
@@ -84,12 +87,14 @@ class Animals_Minigame(Minigame):
         elif animal3 == 'Ant':
             self.initScaleImage('Ant', 2, 2)
 
+    #create the background image and magnifying glass as an object to be shown on screen
     def createObjects(self):
         self.background = pg.transform.scale(self.imageSet['Detective_room'], (1280,720))
         self.mag_glass = self.initImageObjectRect('Mag_glass', (self.WIDTH // 2 - self.imageSet['Mag_glass'].get_width() // 2) + 50, (int)(self.HEIGHT * .6) - self.imageSet['Mag_glass'].get_height() // 2)
 
-
+    #determine which text for selection will be presented based on what the answer is
     def createTutorialText(self, question_mode):
+        #if answer is a bird, display bird text
         if question_mode == 0:
             self.tutorial_text = self.tutorial_font.render("Select the Bird", True, (0,0,0))
         elif question_mode == 1:
@@ -103,15 +108,19 @@ class Animals_Minigame(Minigame):
         elif question_mode == 5:
             self.tutorial_text = self.tutorial_font.render("Select the Amphibian", True, (0,0,0))
 
+        #transform text to rectangle, center it onto the screen
         self.tutorial_rect = self.tutorial_text.get_rect()
         self.tutorial_rect.center = (600,50)
 
+    #get player input of keys, draw the window on users screen
     def run_minigame(self):
         keys_pressed = pg.key.get_pressed()
         self.handle_mag_glass_movement(keys_pressed);
         self.draw_window()
         
+    #draws window with background and animal sprites
     def draw_window(self):
+        #update move timer of mag_glass
         self.move_timer += 1
         self.WIN.blit(self.background,(0,0))
         
@@ -121,6 +130,7 @@ class Animals_Minigame(Minigame):
 
         self.WIN.blit(self.imageSet['Mag_glass'], (self.mag_glass.x, self.mag_glass.y))
 
+        #display tutorial text for certain amount of time
         if self.tutorial_timer < 70:
             self.tutorial_timer += 1
             self.WIN.blit(self.tutorial_text,self.tutorial_rect)
@@ -128,26 +138,32 @@ class Animals_Minigame(Minigame):
         self.drawTimer();
         pg.display.update()
 
+    #defines if answer choosen by user is the correct answer
     def correctAnswer(self):
         if self.answerKey - 2 == self.CURRENT_POS:
             return True
         else:
             return False
 
+    #handles mag glass movement based on users input
     def handle_mag_glass_movement(self, keys_pressed):
+        #only allow movement after 10 updates, so movement is not rapid
         if self.move_timer < 10:
-            quit
+            return
         elif keys_pressed[pg.K_LEFT] and self.CURRENT_POS != -1:
             self.move_timer = 0
             self.CURRENT_POS = self.CURRENT_POS - 1;
             self.mag_glass.x -= self.imageSet['Mag_glass'].get_width() - 100
+        #check if right key clicked, moves glass to right position if not in furthest right position
         elif keys_pressed[pg.K_RIGHT] and self.CURRENT_POS != 1:
             self.move_timer = 0;
             self.CURRENT_POS = self.CURRENT_POS + 1;
             self.mag_glass.x += self.imageSet['Mag_glass'].get_width() - 100
 
+    #randomly create answer choice for player to choose from
     def createAnswerChoices(self):
         question_mode = random.randint(0,5)
+        #all possible options of animals to choose from
         birds = ['Seagull', 'Bird']
         mammals = ['Giraffe', 'Dolphin', 'Monkey']
         reptiles = ['Lizard', 'Snake']
@@ -155,37 +171,44 @@ class Animals_Minigame(Minigame):
         fish = ['Fish', 'Swordfish']
         amphibian = ['Frog', 'Axolotl']
 
+        #birds is correct answer
         if question_mode == 0:
             possible_wrong = [mammals, reptiles, insects, fish, amphibian];
             possible_wrong1 = random.randint(0,4)
             possible_wrong2 = random.randint(0,4)
             self.chooseAnswersFrom3(birds, possible_wrong[possible_wrong1], possible_wrong[possible_wrong2])
+        #mammals is correct answer
         elif question_mode == 1:
             possible_wrong = [birds, reptiles, insects, fish, amphibian];
             possible_wrong1 = random.randint(0,4)
             possible_wrong2 = random.randint(0,4)
             self.chooseAnswersFrom3(mammals, possible_wrong[possible_wrong1], possible_wrong[possible_wrong2])
+        #reptiles is the correct answer
         elif question_mode == 2:
             possible_wrong = [birds, mammals, insects, fish, amphibian];
             possible_wrong1 = random.randint(0,4)
             possible_wrong2 = random.randint(0,4)
             self.chooseAnswersFrom3(reptiles, possible_wrong[possible_wrong1], possible_wrong[possible_wrong2])
+        #insects is the correct answer
         elif question_mode == 3:
             possible_wrong = [birds, reptiles, mammals, fish, amphibian];
             possible_wrong1 = random.randint(0,4)
             possible_wrong2 = random.randint(0,4)
             self.chooseAnswersFrom3(insects, possible_wrong[possible_wrong1], possible_wrong[possible_wrong2])
+        #fish is the correct answer
         elif question_mode == 4:
             possible_wrong = [birds, reptiles, insects, mammals, amphibian];
             possible_wrong1 = random.randint(0,4)
             possible_wrong2 = random.randint(0,4)
             self.chooseAnswersFrom3(fish, possible_wrong[possible_wrong1], possible_wrong[possible_wrong2])
+        #amphibians is the correct answer
         elif question_mode == 5:
             possible_wrong = [birds, reptiles, insects, fish, mammals];
             possible_wrong1 = random.randint(0,4)
             possible_wrong2 = random.randint(0,4)
             self.chooseAnswersFrom3(amphibian, possible_wrong[possible_wrong1], possible_wrong[possible_wrong2])
 
+        #answerkey gets choosen in chooseANswersFrom3 function, based on that creates the animal objects in the correct position to display on screen
         if self.answerKey == 1:
             self.createAnimalObjects(self.getAnswer(), self.getWrong1(), self.getWrong2())
         elif self.answerKey == 2:
@@ -193,14 +216,15 @@ class Animals_Minigame(Minigame):
         elif self.answerKey == 3:
             self.createAnimalObjects(self.getWrong1(), self.getWrong2(), self.getAnswer())
 
-
+        #create the tutorial text based on which animal the user should choose
         self.createTutorialText(question_mode)
 
+    #loads the 3 animals used to display
     def loadAnimals(self, animal1, animal2, animal3):
         self.loadImages([animal1 + '.png', animal2 + '.png', animal3 + '.png'])
         self.transformAnimalImages(animal1,animal2, animal3)
 
-
+    #Creates animal objects based on which 3 animals were choosen to be displayed
     def createAnimalObjects(self, animal1, animal2, animal3):
         self.loadAnimals(animal1, animal2, animal3)
         if animal1 == 'Fish':
@@ -329,5 +353,6 @@ class Animals_Minigame(Minigame):
         
         self.animal3.center = (1066, 400);
 
+    #returns minigame tag for this minigame, which is animals
     def getMinigameTag(self):
         return 'animals'
